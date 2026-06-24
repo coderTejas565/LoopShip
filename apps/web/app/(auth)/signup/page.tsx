@@ -10,7 +10,7 @@ export default function SignupPage() {
           </h1>
 
           <p className="mt-2 text-muted-foreground">
-            Ship products. Collect feedback.
+            From Request To Release.
           </p>
         </div>
 
