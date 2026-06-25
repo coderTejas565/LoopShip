@@ -15,3 +15,20 @@ export const organizationPlanEnum = pgEnum("organization_plan", [
   "free",
   "pro",
 ]);
+
+export const featureRequestStatusEnum =
+  pgEnum("feature_request_status", [
+    "draft",
+    "clarification_needed",
+    "approved",
+    "rejected",
+    "prd_generated",
+  ]);
+
+export const featureRequestSourceEnum =
+  pgEnum("feature_request_source", [
+    "manual",
+    "email",
+    "support_ticket",
+    "call",
+  ]);

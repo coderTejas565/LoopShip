@@ -29,8 +29,12 @@ export const projects = pgTable(
     createdBy: text("created_by")
       .notNull()
       .references(() => user.id, {
-        onDelete: "set null",
+        onDelete: "cascade",
       }),
+
+    githubRepository: text("github_repository"),
+    
+    defaultBranch: text("default_branch").default("main"),  
 
     createdAt: timestamp("created_at", {
       withTimezone: true,
