@@ -1,9 +1,14 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getSession } from "~/lib/session";
+
+import { auth } from "@repo/auth";
+
 import { LogoutButton } from "~/components/logout-button";
 
 export default async function DashboardPage() {
-  const session = await getSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   if (!session) {
     redirect("/login");
