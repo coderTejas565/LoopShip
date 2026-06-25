@@ -1,11 +1,13 @@
 import {
   integer,
   pgTable,
+  jsonb,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
 
 import { featureRequests } from "./feature-requests";
+import { prdStatusEnum } from "./enums";
 
 export const prds = pgTable("prds", {
   id: text("id")
@@ -26,23 +28,23 @@ export const prds = pgTable("prds", {
     "problem_statement",
   ).notNull(),
 
-  goals: text("goals").notNull(),
+  goals: jsonb("goals").notNull(),
 
-  nonGoals: text("non_goals").notNull(),
+  nonGoals: jsonb("non_goals").notNull(),
 
-  userStories: text("user_stories").notNull(),
+  userStories: jsonb("user_stories").notNull(),
 
-  acceptanceCriteria: text(
+  acceptanceCriteria: jsonb(
     "acceptance_criteria",
   ).notNull(),
 
-  edgeCases: text("edge_cases").notNull(),
+  edgeCases: jsonb("edge_cases").notNull(),
 
-  successMetrics: text(
+  successMetrics: jsonb(
     "success_metrics",
   ).notNull(),
 
-  status: text("status")
+  status: prdStatusEnum("status")
     .default("draft")
     .notNull(),
 

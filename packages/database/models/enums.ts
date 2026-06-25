@@ -32,3 +32,13 @@ export const featureRequestSourceEnum =
     "support_ticket",
     "call",
   ]);
+
+  export const prdStatusEnum = pgEnum(
+  "prd_status",
+  [
+    "draft",
+    "generated",
+    "approved",
+    "archived",
+  ],
+);

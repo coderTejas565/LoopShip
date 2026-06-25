@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1782143822736,
-      "tag": "0000_gifted_master_mold",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1782309543024,
-      "tag": "0001_melted_lady_bullseye",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1782386121683,
-      "tag": "0002_great_betty_ross",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1782386255117,
-      "tag": "0003_powerful_masque",
+      "when": 1782392870506,
+      "tag": "0000_good_fenris",
       "breakpoints": true
     }
   ]
