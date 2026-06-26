@@ -7,12 +7,15 @@ import { projectRouter } from "./routes/projects/route";
 
 import { featureRequestRouter } from "./routes/feature-requests/route";
 
+import { prdRouter } from "./routes/prd/route";
+
 export const serverRouter = router({
   // health: healthRouter,
   // auth: authRouter,
   organization: organizationRouter,
   project: projectRouter,
   featureRequest: featureRequestRouter,
+  prd: prdRouter,
 });
 
 export { createContext } from "./context";

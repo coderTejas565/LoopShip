@@ -6,6 +6,8 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
+import { user } from "./auth-schema";
+
 import { featureRequests } from "./feature-requests";
 import { prdStatusEnum } from "./enums";
 
@@ -47,6 +49,20 @@ export const prds = pgTable("prds", {
   status: prdStatusEnum("status")
     .default("draft")
     .notNull(),
+
+  lastEditedBy: text("last_edited_by")
+  .references(() => user.id, {
+    onDelete: "set null",
+  }),
+  
+  approvedBy: text("approved_by")
+  .references(() => user.id, {
+    onDelete: "set null",
+  }), 
+  
+  approvedAt: timestamp("approved_at", {
+  withTimezone: true,
+  }),
 
   createdAt: timestamp("created_at", {
     withTimezone: true,
