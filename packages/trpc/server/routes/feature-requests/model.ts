@@ -86,3 +86,11 @@ export const getFeatureRequestsOutput =
       ]),
     }),
   );
+
+  export const generatePRDInput = z.object({
+  featureRequestId: z.string(),
+});
+
+export const generatePRDOutput = z.object({
+  prdId: z.string(),
+});

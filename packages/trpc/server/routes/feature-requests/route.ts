@@ -14,6 +14,10 @@ import {
   router,
 } from "../../trpc";
 
+import { generatePRD } from "@repo/ai";
+
+import { prds } from "@repo/database";
+
 import {
   createFeatureRequestInput,
   createFeatureRequestOutput,
@@ -21,6 +25,8 @@ import {
   getFeatureRequestOutput,
   getFeatureRequestsInput,
   getFeatureRequestsOutput,
+  generatePRDInput,
+  generatePRDOutput
 } from "./model";
 
 export const featureRequestRouter =
@@ -212,4 +218,89 @@ export const featureRequestRouter =
             };
           },
         ),
+        generatePRD: protectedProcedure
+  .input(generatePRDInput)
+  .output(generatePRDOutput)
+  .mutation(async ({ input }) => {
+    const result = await db
+      .select()
+      .from(featureRequests)
+      .where(
+        eq(
+          featureRequests.id,
+          input.featureRequestId,
+        ),
+      )
+      .limit(1);
+
+    const feature = result[0];
+
+    if (!feature) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Feature request not found",
+      });
+    }
+
+    const generated =
+      await generatePRD({
+        title: feature.title,
+        description: feature.description,
+      });
+
+    const inserted = await db
+      .insert(prds)
+      .values({
+        featureRequestId: feature.id,
+
+        problemStatement:
+          generated.problemStatement,
+
+        goals: generated.goals,
+
+        nonGoals: generated.nonGoals,
+
+        userStories:
+          generated.userStories,
+
+        acceptanceCriteria:
+          generated.acceptanceCriteria,
+
+        edgeCases:
+          generated.edgeCases,
+
+        successMetrics:
+          generated.successMetrics,
+
+        status: "generated",
+      })
+      .returning({
+        id: prds.id,
+      });
+
+    const prd = inserted[0];
+
+    if (!prd) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to save PRD",
+      });
+    }
+
+    await db
+      .update(featureRequests)
+      .set({
+        status: "prd_generated",
+      })
+      .where(
+        eq(
+          featureRequests.id,
+          feature.id,
+        ),
+      );
+
+    return {
+      prdId: prd.id,
+    };
+  }),   
   });

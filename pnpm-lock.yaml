@@ -472,6 +472,9 @@ importers:
 
   packages/trpc:
     dependencies:
+      '@repo/ai':
+        specifier: workspace:*
+        version: link:../ai
       '@repo/auth':
         specifier: workspace:*
         version: link:../auth

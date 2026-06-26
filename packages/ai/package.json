@@ -19,5 +19,8 @@
   },
   "scripts": {
     "dev": "tsx test.ts"
+  },
+  "exports": {
+    ".": "./index.ts"
   }
 }
