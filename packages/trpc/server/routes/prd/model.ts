@@ -1,49 +1,60 @@
 import { z } from "zod";
 
-export const getPRDInput = z.object({
-  prdId: z.string(),
-});
+const stringArray = z.array(z.string().min(1));
 
-export const getPRDOutput = z.object({
-  id: z.string(),
+export const prdStatusSchema = z.enum([
+  "draft",
+  "generated",
+  "approved",
+  "archived",
+]);
 
-  featureRequestId: z.string(),
+export const prdSchema = z.object({
+  id: z.uuid(),
+
+  featureRequestId: z.uuid(),
 
   version: z.number(),
 
   problemStatement: z.string(),
 
-  goals: z.array(z.string()),
+  goals: stringArray,
 
-  nonGoals: z.array(z.string()),
+  nonGoals: stringArray,
 
-  userStories: z.array(z.string()),
+  userStories: stringArray,
 
-  acceptanceCriteria: z.array(z.string()),
+  acceptanceCriteria: stringArray,
 
-  edgeCases: z.array(z.string()),
+  edgeCases: stringArray,
 
-  successMetrics: z.array(z.string()),
+  successMetrics: stringArray,
 
-  status: z.enum(["draft", "generated", "approved", "archived"]),
+  status: prdStatusSchema,
 });
 
+export const getPRDInput = z.object({
+  prdId: z.uuid(),
+});
+
+export const getPRDOutput = prdSchema;
+
 export const updatePRDInput = z.object({
-  prdId: z.string(),
+  prdId: z.uuid(),
 
-  problemStatement: z.string(),
+  problemStatement: z.string().min(1),
 
-  goals: z.array(z.string()),
+  goals: stringArray,
 
-  nonGoals: z.array(z.string()),
+  nonGoals: stringArray,
 
-  userStories: z.array(z.string()),
+  userStories: stringArray,
 
-  acceptanceCriteria: z.array(z.string()),
+  acceptanceCriteria: stringArray,
 
-  edgeCases: z.array(z.string()),
+  edgeCases: stringArray,
 
-  successMetrics: z.array(z.string()),
+  successMetrics: stringArray,
 });
 
 export const updatePRDOutput = z.object({
@@ -51,7 +62,7 @@ export const updatePRDOutput = z.object({
 });
 
 export const approvePRDInput = z.object({
-  prdId: z.string(),
+  prdId: z.uuid(),
 });
 
 export const approvePRDOutput = z.object({
