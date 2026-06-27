@@ -6,7 +6,6 @@ import { protectedProcedure, router } from "../../trpc";
 
 import { inngest, events } from "@repo/inngest";
 
-
 import {
   createFeatureRequestInput,
   createFeatureRequestOutput,
@@ -65,11 +64,11 @@ export const featureRequestRouter = router({
       }
 
       await inngest.send({
-  name: events.featureRequestCreated,
-  data: {
-    featureRequestId: feature.id,
-  },
-});
+        name: events.featureRequestCreated,
+        data: {
+          featureRequestId: feature.id,
+        },
+      });
 
       return {
         id: feature.id,

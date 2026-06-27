@@ -1,20 +1,21 @@
+import { config } from "dotenv";
+import path from "node:path";
 import { z } from "zod";
+
+config({
+  path: path.resolve(process.cwd(), "../../.env"),
+});
 
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
-
   BETTER_AUTH_SECRET: z.string().min(1),
   BETTER_AUTH_URL: z.string().url(),
 });
 
-function createEnv(env: NodeJS.ProcessEnv) {
-  const safeParseResult = envSchema.safeParse(env);
+const parsed = envSchema.safeParse(process.env);
 
-  if (!safeParseResult.success) {
-    throw new Error(safeParseResult.error.message);
-  }
-
-  return safeParseResult.data;
+if (!parsed.success) {
+  throw new Error(parsed.error.message);
 }
 
-export const env = createEnv(process.env);
+export const env = parsed.data;

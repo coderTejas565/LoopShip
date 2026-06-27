@@ -7,6 +7,8 @@ const pool = new Pool({
   connectionString: env.DATABASE_URL,
 });
 
+console.log(env.DATABASE_URL);
+
 export const db = drizzle(pool);
 
 export * from "drizzle-orm";

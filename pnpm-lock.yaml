@@ -447,6 +447,9 @@ importers:
       '@repo/ai':
         specifier: workspace:*
         version: link:../ai
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
       '@repo/typescript-config':
         specifier: workspace:^
         version: link:../typescript-config
