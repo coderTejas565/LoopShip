@@ -1,26 +1,18 @@
-import {
-  generateText,
-  NoObjectGeneratedError,
-  Output,
-} from "ai";
+import { generateText, NoObjectGeneratedError, Output } from "ai";
 
-import { google } from "../providers/google";
+import { createModel } from "../models/gemini";
 
 import { PRD_SYSTEM_PROMPT } from "../prompts/prd";
 
 import { generatedPRDSchema } from "../schemas/prd";
 
-import type {
-  GeneratePRDInput,
-  GeneratedPRD,
-} from "../types/prd";
+import type { GeneratePRDInput, GeneratedPRD } from "../types/prd";
 
-export async function generatePRD(
-  input: GeneratePRDInput,
-): Promise<GeneratedPRD> {
+export async function generatePRD(input: GeneratePRDInput): Promise<GeneratedPRD> {
+  const model = createModel(input.apiKey);
   try {
     const { output } = await generateText({
-      model: google("gemini-2.5-flash"),
+      model,
 
       system: PRD_SYSTEM_PROMPT,
 
@@ -35,8 +27,7 @@ ${input.description}
       output: Output.object({
         name: "ProductRequirementDocument",
 
-        description:
-          "A production-ready Product Requirement Document.",
+        description: "A production-ready Product Requirement Document.",
 
         schema: generatedPRDSchema,
       }),
@@ -44,12 +35,8 @@ ${input.description}
 
     return output;
   } catch (error) {
-    if (
-      NoObjectGeneratedError.isInstance(error)
-    ) {
-      console.error(
-        "Failed to generate valid structured output",
-      );
+    if (NoObjectGeneratedError.isInstance(error)) {
+      console.error("Failed to generate valid structured output");
 
       console.error(error.text);
 
@@ -57,9 +44,7 @@ ${input.description}
 
       console.error(error.usage);
 
-      throw new Error(
-        "AI failed to generate a valid Product Requirement Document.",
-      );
+      throw new Error("AI failed to generate a valid Product Requirement Document.");
     }
 
     throw error;

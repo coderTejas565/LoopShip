@@ -5,13 +5,7 @@ import { useState } from "react";
 import { authClient } from "~/lib/auth-client";
 
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { useRouter } from "next/navigation";
@@ -36,8 +30,7 @@ export function SignupForm() {
         password,
       });
 
-router.push("/dashboard");
-
+      router.push("/dashboard");
     } catch (error) {
       console.error(error);
       alert("Failed to create account");
@@ -49,13 +42,9 @@ router.push("/dashboard");
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-2">
-        <CardTitle className="text-2xl font-bold">
-          Create account
-        </CardTitle>
+        <CardTitle className="text-2xl font-bold">Create account</CardTitle>
 
-        <CardDescription>
-          Start using LoopShip today
-        </CardDescription>
+        <CardDescription>Start using LoopShip today</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -99,21 +88,14 @@ router.push("/dashboard");
             />
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loading}
-          >
+          <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Creating account..." : "Create Account"}
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link
-            href="/login"
-            className="font-medium text-foreground hover:underline"
-          >
+          <Link href="/login" className="font-medium text-foreground hover:underline">
             Sign in
           </Link>
         </p>

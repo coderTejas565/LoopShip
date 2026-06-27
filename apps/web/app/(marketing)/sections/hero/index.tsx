@@ -55,15 +55,11 @@ export function Hero() {
 
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <Button size="lg" asChild>
-            <Link href={heroContent.primaryCTA.href}>
-              {heroContent.primaryCTA.label}
-            </Link>
+            <Link href={heroContent.primaryCTA.href}>{heroContent.primaryCTA.label}</Link>
           </Button>
 
           <Button variant="outline" size="lg" asChild>
-            <Link href={heroContent.secondaryCTA.href}>
-              {heroContent.secondaryCTA.label}
-            </Link>
+            <Link href={heroContent.secondaryCTA.href}>{heroContent.secondaryCTA.label}</Link>
           </Button>
         </div>
       </div>

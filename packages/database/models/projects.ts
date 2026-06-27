@@ -22,9 +22,7 @@ export const projects = pgTable(
 
     description: text("description"),
 
-    status: projectStatusEnum("status")
-      .default("active")
-      .notNull(),
+    status: projectStatusEnum("status").default("active").notNull(),
 
     createdBy: text("created_by")
       .notNull()
@@ -33,8 +31,8 @@ export const projects = pgTable(
       }),
 
     githubRepository: text("github_repository"),
-    
-    defaultBranch: text("default_branch").default("main"),  
+
+    defaultBranch: text("default_branch").default("main"),
 
     createdAt: timestamp("created_at", {
       withTimezone: true,
@@ -49,9 +47,6 @@ export const projects = pgTable(
       .notNull(),
   },
   (table) => ({
-    organizationProjectSlugUnique: unique().on(
-      table.organizationId,
-      table.slug
-    ),
-  })
+    organizationProjectSlugUnique: unique().on(table.organizationId, table.slug),
+  }),
 );

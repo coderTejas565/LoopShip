@@ -7,11 +7,9 @@ export function middleware(request: NextRequest) {
     request.cookies.get("__Secure-better-auth.session_token");
 
   const isAuthPage =
-    request.nextUrl.pathname.startsWith("/login") ||
-    request.nextUrl.pathname.startsWith("/signup");
+    request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname.startsWith("/signup");
 
-  const isProtectedPage =
-    request.nextUrl.pathname.startsWith("/dashboard");
+  const isProtectedPage = request.nextUrl.pathname.startsWith("/dashboard");
 
   if (isProtectedPage && !sessionCookie) {
     return NextResponse.redirect(new URL("/login", request.url));

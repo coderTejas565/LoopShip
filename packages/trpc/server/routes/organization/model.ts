@@ -1,10 +1,7 @@
 import { z } from "zod";
 
 export const createOrganizationInput = z.object({
-  name: z
-    .string()
-    .min(3)
-    .max(100),
+  name: z.string().min(3).max(100),
 
   slug: z
     .string()
@@ -26,17 +23,9 @@ export const getCurrentOrganizationOutput = z.object({
 
   imageUrl: z.string().nullable(),
 
-  plan: z.enum([
-    "free",
-    "pro",
-    "enterprise",
-  ]),
+  plan: z.enum(["free", "pro", "enterprise"]),
 
-  role: z.enum([
-    "owner",
-    "admin",
-    "member",
-  ]),
+  role: z.enum(["owner", "admin", "member"]),
 });
 
 export const getOrganizationsOutput = z.array(
@@ -49,16 +38,8 @@ export const getOrganizationsOutput = z.array(
 
     imageUrl: z.string().nullable(),
 
-    plan: z.enum([
-      "free",
-      "pro",
-      "enterprise",
-    ]),
+    plan: z.enum(["free", "pro", "enterprise"]),
 
-    role: z.enum([
-      "owner",
-      "admin",
-      "member",
-    ]),
+    role: z.enum(["owner", "admin", "member"]),
   }),
 );

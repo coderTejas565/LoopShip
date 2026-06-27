@@ -13,15 +13,13 @@ export interface Context {
   } | null;
 }
 
-export async function createContext({
-  req,
-}: CreateExpressContextOptions): Promise<Context> {
+export async function createContext({ req }: CreateExpressContextOptions): Promise<Context> {
   const session = await auth.api.getSession({
     headers: new Headers(
-  Object.entries(req.headers)
-    .filter(([, value]) => typeof value === "string")
-    .map(([key, value]) => [key, value as string]),
-),
+      Object.entries(req.headers)
+        .filter(([, value]) => typeof value === "string")
+        .map(([key, value]) => [key, value as string]),
+    ),
   });
 
   return {

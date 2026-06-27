@@ -13,9 +13,7 @@ export const organizations = pgTable("organizations", {
 
   imageUrl: text("image_url"),
 
-  plan: organizationPlanEnum("plan")
-    .default("free")
-    .notNull(),
+  plan: organizationPlanEnum("plan").default("free").notNull(),
 
   ownerId: text("owner_id")
     .notNull()

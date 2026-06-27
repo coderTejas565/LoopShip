@@ -5,13 +5,7 @@ import { useState } from "react";
 import { authClient } from "~/lib/auth-client";
 
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { useRouter } from "next/navigation";
@@ -21,7 +15,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-   const router = useRouter();
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,7 +28,7 @@ export function LoginForm() {
         password,
       });
 
-     router.push("/dashboard");
+      router.push("/dashboard");
     } catch (error) {
       console.error(error);
       alert("Invalid credentials");
@@ -46,13 +40,9 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md border">
       <CardHeader className="space-y-2">
-        <CardTitle className="text-2xl font-bold">
-          Welcome back
-        </CardTitle>
+        <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
 
-        <CardDescription>
-          Sign in to your LoopShip account
-        </CardDescription>
+        <CardDescription>Sign in to your LoopShip account</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -83,21 +73,14 @@ export function LoginForm() {
             />
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loading}
-          >
+          <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link
-            href="/signup"
-            className="font-medium text-foreground hover:underline"
-          >
+          <Link href="/signup" className="font-medium text-foreground hover:underline">
             Create account
           </Link>
         </p>

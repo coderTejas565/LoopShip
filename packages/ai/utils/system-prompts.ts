@@ -1,7 +1,4 @@
-export function createSystemPrompt(
-  role: string,
-  instructions: string[],
-) {
+export function createSystemPrompt(role: string, instructions: string[]) {
   return `
 You are ${role}.
 

@@ -1,13 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Bot,
-  FileText,
-  ClipboardList,
-  GitPullRequest,
-  Rocket,
-} from "lucide-react";
+import { Bot, FileText, ClipboardList, GitPullRequest, Rocket } from "lucide-react";
 
 export function WorkflowAnimation() {
   return (
@@ -39,10 +33,7 @@ export function WorkflowAnimation() {
 
       {/* paths */}
 
-      <svg
-        className="absolute inset-0 h-full w-full"
-        viewBox="0 0 1440 1000"
-      >
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1440 1000">
         <motion.path
           d="M 250 650 Q 450 650 700 650"
           fill="none"
@@ -138,10 +129,7 @@ export function WorkflowAnimation() {
           top-[72%]
         "
       >
-        <Card
-          title="Feature Request"
-          value="Add OAuth Login"
-        />
+        <Card title="Feature Request" value="Add OAuth Login" />
       </motion.div>
 
       {/* AI core */}
@@ -227,26 +215,11 @@ export function WorkflowAnimation() {
 
       {/* outputs */}
 
-      <Node
-        icon={<FileText size={18} />}
-        title="PRD"
-        left="68%"
-        top="52%"
-      />
+      <Node icon={<FileText size={18} />} title="PRD" left="68%" top="52%" />
 
-      <Node
-        icon={<ClipboardList size={18} />}
-        title="Tasks"
-        left="73%"
-        top="72%"
-      />
+      <Node icon={<ClipboardList size={18} />} title="Tasks" left="73%" top="72%" />
 
-      <Node
-        icon={<GitPullRequest size={18} />}
-        title="Review"
-        left="68%"
-        top="88%"
-      />
+      <Node icon={<GitPullRequest size={18} />} title="Review" left="68%" top="88%" />
 
       {/* ship */}
 
@@ -264,22 +237,13 @@ export function WorkflowAnimation() {
           top-[72%]
         "
       >
-        <Card
-          title="Shipped"
-          value="Ready For Production 🚀"
-        />
+        <Card title="Shipped" value="Ready For Production 🚀" />
       </motion.div>
     </div>
   );
 }
 
-function Card({
-  title,
-  value,
-}: {
-  title: string;
-  value: string;
-}) {
+function Card({ title, value }: { title: string; value: string }) {
   return (
     <div
       className="
@@ -291,13 +255,9 @@ function Card({
         py-4
       "
     >
-      <p className="text-xs text-muted-foreground">
-        {title}
-      </p>
+      <p className="text-xs text-muted-foreground">{title}</p>
 
-      <p className="mt-2 font-medium">
-        {value}
-      </p>
+      <p className="mt-2 font-medium">{value}</p>
     </div>
   );
 }

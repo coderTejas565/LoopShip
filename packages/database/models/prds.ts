@@ -1,10 +1,4 @@
-import {
-  integer,
-  pgTable,
-  jsonb,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, jsonb, text, timestamp } from "drizzle-orm/pg-core";
 
 import { user } from "./auth-schema";
 
@@ -22,13 +16,9 @@ export const prds = pgTable("prds", {
       onDelete: "cascade",
     }),
 
-  version: integer("version")
-    .default(1)
-    .notNull(),
+  version: integer("version").default(1).notNull(),
 
-  problemStatement: text(
-    "problem_statement",
-  ).notNull(),
+  problemStatement: text("problem_statement").notNull(),
 
   goals: jsonb("goals").notNull(),
 
@@ -36,32 +26,24 @@ export const prds = pgTable("prds", {
 
   userStories: jsonb("user_stories").notNull(),
 
-  acceptanceCriteria: jsonb(
-    "acceptance_criteria",
-  ).notNull(),
+  acceptanceCriteria: jsonb("acceptance_criteria").notNull(),
 
   edgeCases: jsonb("edge_cases").notNull(),
 
-  successMetrics: jsonb(
-    "success_metrics",
-  ).notNull(),
+  successMetrics: jsonb("success_metrics").notNull(),
 
-  status: prdStatusEnum("status")
-    .default("draft")
-    .notNull(),
+  status: prdStatusEnum("status").default("draft").notNull(),
 
-  lastEditedBy: text("last_edited_by")
-  .references(() => user.id, {
+  lastEditedBy: text("last_edited_by").references(() => user.id, {
     onDelete: "set null",
   }),
-  
-  approvedBy: text("approved_by")
-  .references(() => user.id, {
+
+  approvedBy: text("approved_by").references(() => user.id, {
     onDelete: "set null",
-  }), 
-  
+  }),
+
   approvedAt: timestamp("approved_at", {
-  withTimezone: true,
+    withTimezone: true,
   }),
 
   createdAt: timestamp("created_at", {

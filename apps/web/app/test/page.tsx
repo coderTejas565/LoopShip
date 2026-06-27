@@ -4,11 +4,9 @@ import { useState } from "react";
 import { trpc } from "~/trpc/client";
 
 export default function TestPage() {
-  const [organizationId, setOrganizationId] =
-    useState("");
+  const [organizationId, setOrganizationId] = useState("");
 
-  const createProject =
-    trpc.project.createProject.useMutation();
+  const createProject = trpc.project.createProject.useMutation();
 
   return (
     <div className="p-10">
@@ -21,8 +19,7 @@ export default function TestPage() {
 
             slug: "loopship-web",
 
-            description:
-              "Main product",
+            description: "Main product",
           })
         }
       >

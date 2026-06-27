@@ -25,12 +25,7 @@ export const getPRDOutput = z.object({
 
   successMetrics: z.array(z.string()),
 
-  status: z.enum([
-    "draft",
-    "generated",
-    "approved",
-    "archived",
-  ]),
+  status: z.enum(["draft", "generated", "approved", "archived"]),
 });
 
 export const updatePRDInput = z.object({

@@ -10,6 +10,8 @@ import { serverRouter, createContext } from "@repo/trpc/server";
 
 import { env } from "./env";
 
+import { inngestRouter } from "./inngest/route";
+
 export const app = express();
 const openApiDocument = generateOpenApiDocument(serverRouter, {
   title: "Streamyst OpenAPI",
@@ -20,10 +22,7 @@ const openApiDocument = generateOpenApiDocument(serverRouter, {
 if (env.NODE_ENV !== "prod") {
   app.use(
     cors({
-      origin: [
-        "http://localhost:3000",
-        "http://localhost:3001",
-      ],
+      origin: ["http://localhost:3000", "http://localhost:3001"],
       credentials: true,
     }),
   );
@@ -38,6 +37,8 @@ app.get("/", (req, res) => {
 app.get("/health", (req, res) => {
   return res.json({ message: "Streamyst server is healthy", healthy: true });
 });
+
+app.use("/api/inngest", inngestRouter);
 
 logger.debug(`openapi.json: ${env.BASE_URL}/openapi.json`);
 app.get("/openapi.json", (req, res) => {

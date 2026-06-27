@@ -22,9 +22,7 @@ export const memberships = pgTable(
         onDelete: "cascade",
       }),
 
-    role: organizationRoleEnum("role")
-      .default("member")
-      .notNull(),
+    role: organizationRoleEnum("role").default("member").notNull(),
 
     joinedAt: timestamp("joined_at", {
       withTimezone: true,
@@ -33,9 +31,6 @@ export const memberships = pgTable(
       .notNull(),
   },
   (table) => ({
-    organizationUserUnique: unique().on(
-      table.organizationId,
-      table.userId
-    ),
-  })
+    organizationUserUnique: unique().on(table.organizationId, table.userId),
+  }),
 );

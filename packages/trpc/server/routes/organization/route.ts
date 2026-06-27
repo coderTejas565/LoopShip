@@ -1,16 +1,8 @@
 import { TRPCError } from "@trpc/server";
 
-import {
-  eq,
-  desc,
-  organizations,
-  memberships,
-} from "@repo/database";
+import { eq, desc, organizations, memberships } from "@repo/database";
 
-import {
-  protectedProcedure,
-  router,
-} from "../../trpc";
+import { protectedProcedure, router } from "../../trpc";
 
 import {
   createOrganizationInput,
@@ -24,9 +16,7 @@ export const organizationRouter = router({
     .input(createOrganizationInput)
     .output(createOrganizationOutput)
     .mutation(async ({ ctx, input }) => {
-      const slug = input.slug
-        .trim()
-        .toLowerCase();
+      const slug = input.slug.trim().toLowerCase();
 
       const existingOrganization = await ctx.db
         .select({
@@ -39,140 +29,90 @@ export const organizationRouter = router({
       if (existingOrganization.length > 0) {
         throw new TRPCError({
           code: "CONFLICT",
-          message:
-            "Organization slug already exists",
+          message: "Organization slug already exists",
         });
       }
 
-      const organizationId =
-        await ctx.db.transaction(
-          async (tx) => {
-            const organizationResult =
-              await tx
-                .insert(organizations)
-                .values({
-                  name: input.name.trim(),
-                  slug,
-                  ownerId: ctx.user.id,
-                })
-                .returning({
-                  id: organizations.id,
-                });
+      const organizationId = await ctx.db.transaction(async (tx) => {
+        const organizationResult = await tx
+          .insert(organizations)
+          .values({
+            name: input.name.trim(),
+            slug,
+            ownerId: ctx.user.id,
+          })
+          .returning({
+            id: organizations.id,
+          });
 
-            const organization =
-              organizationResult[0];
+        const organization = organizationResult[0];
 
-            if (!organization) {
-              throw new TRPCError({
-                code:
-                  "INTERNAL_SERVER_ERROR",
-                message:
-                  "Failed to create organization",
-              });
-            }
+        if (!organization) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Failed to create organization",
+          });
+        }
 
-            await tx
-              .insert(memberships)
-              .values({
-                organizationId:
-                  organization.id,
-                userId: ctx.user.id,
-                role: "owner",
-              });
+        await tx.insert(memberships).values({
+          organizationId: organization.id,
+          userId: ctx.user.id,
+          role: "owner",
+        });
 
-            return organization.id;
-          },
-        );
+        return organization.id;
+      });
 
       return {
         id: organizationId,
       };
     }),
 
-  getCurrentOrganization:
-    protectedProcedure
-      .output(
-        getCurrentOrganizationOutput,
-      )
-      .query(async ({ ctx }) => {
-        const result = await ctx.db
-          .select({
-            id: organizations.id,
-            name: organizations.name,
-            slug: organizations.slug,
-            imageUrl:
-              organizations.imageUrl,
-            plan: organizations.plan,
-            role: memberships.role,
-          })
-          .from(memberships)
-          .innerJoin(
-            organizations,
-            eq(
-              memberships.organizationId,
-              organizations.id,
-            ),
-          )
-          .where(
-            eq(
-              memberships.userId,
-              ctx.user.id,
-            ),
-          )
-          .orderBy(
-            desc(
-              organizations.createdAt,
-            ),
-          )
-          .limit(1);
+  getCurrentOrganization: protectedProcedure
+    .output(getCurrentOrganizationOutput)
+    .query(async ({ ctx }) => {
+      const result = await ctx.db
+        .select({
+          id: organizations.id,
+          name: organizations.name,
+          slug: organizations.slug,
+          imageUrl: organizations.imageUrl,
+          plan: organizations.plan,
+          role: memberships.role,
+        })
+        .from(memberships)
+        .innerJoin(organizations, eq(memberships.organizationId, organizations.id))
+        .where(eq(memberships.userId, ctx.user.id))
+        .orderBy(desc(organizations.createdAt))
+        .limit(1);
 
-        const organization = result[0];
+      const organization = result[0];
 
-        if (!organization) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message:
-              "Organization not found",
-          });
-        }
+      if (!organization) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Organization not found",
+        });
+      }
 
-        return organization;
-      }),
+      return organization;
+    }),
 
-  getMyOrganizations:
-    protectedProcedure
-      .output(getOrganizationsOutput)
-      .query(async ({ ctx }) => {
-        const results = await ctx.db
-          .select({
-            id: organizations.id,
-            name: organizations.name,
-            slug: organizations.slug,
-            imageUrl:
-              organizations.imageUrl,
-            plan: organizations.plan,
-            role: memberships.role,
-          })
-          .from(memberships)
-          .innerJoin(
-            organizations,
-            eq(
-              memberships.organizationId,
-              organizations.id,
-            ),
-          )
-          .where(
-            eq(
-              memberships.userId,
-              ctx.user.id,
-            ),
-          )
-          .orderBy(
-            desc(
-              organizations.createdAt,
-            ),
-          );
+  getMyOrganizations: protectedProcedure.output(getOrganizationsOutput).query(async ({ ctx }) => {
+    const results = await ctx.db
+      .select({
+        id: organizations.id,
+        name: organizations.name,
+        slug: organizations.slug,
+        imageUrl: organizations.imageUrl,
+        plan: organizations.plan,
+        role: memberships.role,
+      })
+      .from(memberships)
+      .innerJoin(organizations, eq(memberships.organizationId, organizations.id))
+      .where(eq(memberships.userId, ctx.user.id))
+      .orderBy(desc(organizations.createdAt));
 
-        return results;
-      }),
+    return results;
+  }),
 });

@@ -9,9 +9,5 @@ export function LogoutButton() {
     window.location.href = "/login";
   }
 
-  return (
-    <Button onClick={handleLogout}>
-      Logout
-    </Button>
-  );
+  return <Button onClick={handleLogout}>Logout</Button>;
 }
