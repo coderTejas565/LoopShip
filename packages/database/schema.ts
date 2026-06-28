@@ -11,3 +11,5 @@ export * from "./models/projects";
 export * from "./models/feature-requests";
 
 export * from "./models/prds";
+
+export * from "./models/tasks";
