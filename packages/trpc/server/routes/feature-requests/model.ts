@@ -47,3 +47,38 @@ export const getFeatureRequestsOutput = z.array(
     status: z.enum(["draft", "clarification_needed", "approved", "rejected", "prd_generated"]),
   }),
 );
+
+export const getRecentFeatureRequestsInput = z.object({
+  organizationId: z.string().uuid(),
+
+  limit: z.number().min(1).max(20).default(5),
+});
+
+export const getRecentFeatureRequestsOutput = z.array(
+  z.object({
+    id: z.string().uuid(),
+
+    title: z.string(),
+
+    source: z.enum([
+      "manual",
+      "email",
+      "support_ticket",
+      "call",
+    ]),
+
+status: z.enum([
+  "draft",
+  "clarification_needed",
+  "approved",
+  "rejected",
+  "prd_generated",
+]),
+
+    project: z.object({
+      id: z.string().uuid(),
+
+      name: z.string(),
+    }),
+  }),
+);

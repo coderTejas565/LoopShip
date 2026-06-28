@@ -1,6 +1,13 @@
 import { TRPCError } from "@trpc/server";
 
-import { db, eq, prds, desc } from "@repo/database";
+import {
+ db,
+ eq,
+ prds,
+ desc,
+ featureRequests,
+ projects,
+} from "@repo/database";
 
 import { protectedProcedure, router } from "../../trpc";
 
@@ -13,6 +20,9 @@ import {
   getPRDByFeatureRequestOutput,
   updatePRDInput,
   updatePRDOutput,
+  getRecentPRDsInput,
+  getRecentPRDsOutput,
+
 } from "./model";
 
 export const prdRouter = router({
@@ -174,4 +184,56 @@ export const prdRouter = router({
         success: true,
       };
     }),
+getRecentPRDs: protectedProcedure
+  .input(getRecentPRDsInput)
+  .output(getRecentPRDsOutput)
+  .query(async ({ input }) => {
+
+    const result = await db
+      .select({
+        id: prds.id,
+
+        version: prds.version,
+
+        status: prds.status,
+
+        featureRequest: {
+          title: featureRequests.title,
+        },
+
+      })
+      .from(prds)
+
+      .innerJoin(
+        featureRequests,
+        eq(
+          prds.featureRequestId,
+          featureRequests.id
+        )
+      )
+
+      .innerJoin(
+        projects,
+        eq(
+          featureRequests.projectId,
+          projects.id
+        )
+      )
+
+      .where(
+        eq(
+          projects.organizationId,
+          input.organizationId
+        )
+      )
+
+      .orderBy(
+        desc(prds.createdAt)
+      )
+
+      .limit(input.limit ?? 5);
+
+
+    return result;
+  }),
 });
