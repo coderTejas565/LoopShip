@@ -2,12 +2,7 @@ import { z } from "zod";
 
 const stringArray = z.array(z.string().min(1));
 
-export const prdStatusSchema = z.enum([
-  "draft",
-  "generated",
-  "approved",
-  "archived",
-]);
+export const prdStatusSchema = z.enum(["draft", "generated", "approved", "archived"]);
 
 export const prdSchema = z.object({
   id: z.uuid(),
@@ -68,3 +63,10 @@ export const approvePRDInput = z.object({
 export const approvePRDOutput = z.object({
   success: z.boolean(),
 });
+
+export const getPRDByFeatureRequestInput = z.object({
+  featureRequestId: z.string(),
+});
+
+export const getPRDByFeatureRequestOutput =
+  getPRDOutput.nullable();

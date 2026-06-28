@@ -1,21 +1,16 @@
 import { TRPCError } from "@trpc/server";
 
-import {
-  db,
-  eq,
-  prds,
-} from "@repo/database";
+import { db, eq, prds, desc } from "@repo/database";
 
-import {
-  protectedProcedure,
-  router,
-} from "../../trpc";
+import { protectedProcedure, router } from "../../trpc";
 
 import {
   approvePRDInput,
   approvePRDOutput,
   getPRDInput,
   getPRDOutput,
+  getPRDByFeatureRequestInput,
+  getPRDByFeatureRequestOutput,
   updatePRDInput,
   updatePRDOutput,
 } from "./model";
@@ -25,11 +20,7 @@ export const prdRouter = router({
     .input(getPRDInput)
     .output(getPRDOutput)
     .query(async ({ input }) => {
-      const result = await db
-        .select()
-        .from(prds)
-        .where(eq(prds.id, input.prdId))
-        .limit(1);
+      const result = await db.select().from(prds).where(eq(prds.id, input.prdId)).limit(1);
 
       const prd = result[0];
 
@@ -43,37 +34,75 @@ export const prdRouter = router({
       return {
         id: prd.id,
 
-        featureRequestId:
-          prd.featureRequestId,
+        featureRequestId: prd.featureRequestId,
 
-        version:
-          prd.version,
+        version: prd.version,
 
-        problemStatement:
-          prd.problemStatement,
+        problemStatement: prd.problemStatement,
 
-        goals:
-          prd.goals as string[],
+        goals: prd.goals as string[],
 
-        nonGoals:
-          prd.nonGoals as string[],
+        nonGoals: prd.nonGoals as string[],
 
-        userStories:
-          prd.userStories as string[],
+        userStories: prd.userStories as string[],
 
-        acceptanceCriteria:
-          prd.acceptanceCriteria as string[],
+        acceptanceCriteria: prd.acceptanceCriteria as string[],
 
-        edgeCases:
-          prd.edgeCases as string[],
+        edgeCases: prd.edgeCases as string[],
 
-        successMetrics:
-          prd.successMetrics as string[],
+        successMetrics: prd.successMetrics as string[],
 
-        status:
-          prd.status,
+        status: prd.status,
       };
     }),
+    getPRDByFeatureRequest: protectedProcedure
+  .input(getPRDByFeatureRequestInput)
+  .output(getPRDByFeatureRequestOutput)
+  .query(async ({ input }) => {
+    const result = await db
+      .select()
+      .from(prds)
+      .where(
+        eq(
+          prds.featureRequestId,
+          input.featureRequestId,
+        ),
+      )
+      .orderBy(desc(prds.version))
+      .limit(1);
+
+    const prd = result[0];
+
+    if (!prd) {
+      return null;
+    }
+
+    return {
+      id: prd.id,
+
+      featureRequestId: prd.featureRequestId,
+
+      version: prd.version,
+
+      problemStatement: prd.problemStatement,
+
+      goals: prd.goals as string[],
+
+      nonGoals: prd.nonGoals as string[],
+
+      userStories: prd.userStories as string[],
+
+      acceptanceCriteria:
+        prd.acceptanceCriteria as string[],
+
+      edgeCases: prd.edgeCases as string[],
+
+      successMetrics:
+        prd.successMetrics as string[],
+
+      status: prd.status,
+    };
+  }),
 
   updatePRD: protectedProcedure
     .input(updatePRDInput)
@@ -84,36 +113,25 @@ export const prdRouter = router({
       const result = await db
         .update(prds)
         .set({
-          problemStatement:
-            input.problemStatement,
+          problemStatement: input.problemStatement,
 
-          goals:
-            input.goals,
+          goals: input.goals,
 
-          nonGoals:
-            input.nonGoals,
+          nonGoals: input.nonGoals,
 
-          userStories:
-            input.userStories,
+          userStories: input.userStories,
 
-          acceptanceCriteria:
-            input.acceptanceCriteria,
+          acceptanceCriteria: input.acceptanceCriteria,
 
-          edgeCases:
-            input.edgeCases,
+          edgeCases: input.edgeCases,
 
-          successMetrics:
-            input.successMetrics,
+          successMetrics: input.successMetrics,
 
-          lastEditedBy:
-            ctx.user.id,
+          lastEditedBy: ctx.user.id,
 
-          updatedAt:
-            now,
+          updatedAt: now,
         })
-        .where(
-          eq(prds.id, input.prdId),
-        )
+        .where(eq(prds.id, input.prdId))
         .returning({
           id: prds.id,
         });
@@ -141,18 +159,13 @@ export const prdRouter = router({
         .set({
           status: "approved",
 
-          approvedBy:
-            ctx.user.id,
+          approvedBy: ctx.user.id,
 
-          approvedAt:
-            now,
+          approvedAt: now,
 
-          updatedAt:
-            now,
+          updatedAt: now,
         })
-        .where(
-          eq(prds.id, input.prdId),
-        )
+        .where(eq(prds.id, input.prdId))
         .returning({
           id: prds.id,
         });
