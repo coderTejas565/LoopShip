@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "../components/providers/theme-provider";
 
 import "./globals.css";
+
+import { GlobalProviders } from "~/providers/global";
 
 export const metadata: Metadata = {
   title: "LoopShip",
@@ -12,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <GlobalProviders>{children}</GlobalProviders>
       </body>
     </html>
   );

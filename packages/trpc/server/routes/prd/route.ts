@@ -55,54 +55,47 @@ export const prdRouter = router({
         status: prd.status,
       };
     }),
-    getPRDByFeatureRequest: protectedProcedure
-  .input(getPRDByFeatureRequestInput)
-  .output(getPRDByFeatureRequestOutput)
-  .query(async ({ input }) => {
-    const result = await db
-      .select()
-      .from(prds)
-      .where(
-        eq(
-          prds.featureRequestId,
-          input.featureRequestId,
-        ),
-      )
-      .orderBy(desc(prds.version))
-      .limit(1);
+  getPRDByFeatureRequest: protectedProcedure
+    .input(getPRDByFeatureRequestInput)
+    .output(getPRDByFeatureRequestOutput)
+    .query(async ({ input }) => {
+      const result = await db
+        .select()
+        .from(prds)
+        .where(eq(prds.featureRequestId, input.featureRequestId))
+        .orderBy(desc(prds.version))
+        .limit(1);
 
-    const prd = result[0];
+      const prd = result[0];
 
-    if (!prd) {
-      return null;
-    }
+      if (!prd) {
+        return null;
+      }
 
-    return {
-      id: prd.id,
+      return {
+        id: prd.id,
 
-      featureRequestId: prd.featureRequestId,
+        featureRequestId: prd.featureRequestId,
 
-      version: prd.version,
+        version: prd.version,
 
-      problemStatement: prd.problemStatement,
+        problemStatement: prd.problemStatement,
 
-      goals: prd.goals as string[],
+        goals: prd.goals as string[],
 
-      nonGoals: prd.nonGoals as string[],
+        nonGoals: prd.nonGoals as string[],
 
-      userStories: prd.userStories as string[],
+        userStories: prd.userStories as string[],
 
-      acceptanceCriteria:
-        prd.acceptanceCriteria as string[],
+        acceptanceCriteria: prd.acceptanceCriteria as string[],
 
-      edgeCases: prd.edgeCases as string[],
+        edgeCases: prd.edgeCases as string[],
 
-      successMetrics:
-        prd.successMetrics as string[],
+        successMetrics: prd.successMetrics as string[],
 
-      status: prd.status,
-    };
-  }),
+        status: prd.status,
+      };
+    }),
 
   updatePRD: protectedProcedure
     .input(updatePRDInput)

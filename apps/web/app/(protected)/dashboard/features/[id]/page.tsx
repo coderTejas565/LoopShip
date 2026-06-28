@@ -4,13 +4,7 @@ import { api } from "~/trpc/server";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 
 export default async function FeaturePage({
@@ -24,51 +18,47 @@ export default async function FeaturePage({
 
   const caller = api();
 
-  const feature =
-    await caller.featureRequest.getFeatureRequest.query({
-      featureRequestId: id,
-    });
+  const feature = await caller.featureRequest.getFeatureRequest.query({
+    featureRequestId: id,
+  });
 
-  const prd =
-    await caller.prd.getPRDByFeatureRequest.query({
-      featureRequestId: id,
-    });
+  const prd = await caller.prd.getPRDByFeatureRequest.query({
+    featureRequestId: id,
+  });
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 p-8">
       {/* Header */}
 
-      <div className="flex items-center justify-between">
-        <div className="space-y-2">
-          <Link
-            href="/dashboard/projects"
-            className="text-sm text-muted-foreground hover:underline"
-          >
-            ← Projects
-          </Link>
+      <div className="space-y-5">
+        <Link
+          href={`/dashboard/projects/${feature.projectId}`}
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          ← Back to Project
+        </Link>
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            {feature.title}
-          </h1>
+        <div className="flex items-start justify-between gap-6">
+          <div className="space-y-3">
+            <h1 className="text-3xl font-bold tracking-tight">{feature.title}</h1>
 
-          <div className="flex gap-2">
-            <Badge>
-              {feature.status}
-            </Badge>
+            <p className="max-w-3xl text-muted-foreground">{feature.description}</p>
 
-            <Badge variant="secondary">
-              {feature.source}
-            </Badge>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="secondary">{feature.status}</Badge>
+
+              <Badge variant="outline">{feature.source}</Badge>
+
+              <Badge variant="outline">{prd ? "PRD Generated" : "Generating PRD"}</Badge>
+            </div>
           </div>
-        </div>
 
-        {prd && (
-          <Button asChild>
-            <Link href={`/dashboard/prds/${prd.id}`}>
-              Open PRD
-            </Link>
-          </Button>
-        )}
+          {prd && (
+            <Button asChild>
+              <Link href={`/dashboard/prds/${prd.id}`}>Open PRD</Link>
+            </Button>
+          )}
+        </div>
       </div>
 
       <Separator />
@@ -76,19 +66,15 @@ export default async function FeaturePage({
       {/* Overview */}
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
+        <Card>
           <CardHeader>
-            <CardTitle>
-              Feature Description
-            </CardTitle>
+            <CardTitle>Feature Description</CardTitle>
 
-            <CardDescription>
-              Original feature request submitted by the user.
-            </CardDescription>
+            <CardDescription>Original customer request</CardDescription>
           </CardHeader>
 
           <CardContent>
-            <p className="whitespace-pre-wrap leading-7 text-muted-foreground">
+            <p className="leading-8 whitespace-pre-wrap text-muted-foreground">
               {feature.description}
             </p>
           </CardContent>
@@ -96,44 +82,30 @@ export default async function FeaturePage({
 
         <Card>
           <CardHeader>
-            <CardTitle>
-              Overview
-            </CardTitle>
+            <CardTitle>Overview</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-5">
             <div>
-              <p className="text-xs uppercase text-muted-foreground">
-                Status
-              </p>
+              <p className="text-xs uppercase text-muted-foreground">Status</p>
 
-              <Badge className="mt-2">
-                {feature.status}
-              </Badge>
+              <Badge className="mt-2">{feature.status}</Badge>
             </div>
 
             <Separator />
 
             <div>
-              <p className="text-xs uppercase text-muted-foreground">
-                Source
-              </p>
+              <p className="text-xs uppercase text-muted-foreground">Source</p>
 
-              <p className="mt-2 font-medium capitalize">
-                {feature.source}
-              </p>
+              <p className="mt-2 font-medium capitalize">{feature.source}</p>
             </div>
 
             <Separator />
 
             <div>
-              <p className="text-xs uppercase text-muted-foreground">
-                AI PRD
-              </p>
+              <p className="text-xs uppercase text-muted-foreground">AI PRD</p>
 
-              <p className="mt-2 font-medium">
-                {prd ? "Generated" : "Pending"}
-              </p>
+              <p className="mt-2 font-medium">{prd ? "Generated" : "Pending"}</p>
             </div>
           </CardContent>
         </Card>
@@ -143,57 +115,33 @@ export default async function FeaturePage({
 
       <Card>
         <CardHeader>
-          <CardTitle>
-            Product Requirement Document
-          </CardTitle>
+          <CardTitle>AI Product Requirement Document</CardTitle>
 
-          <CardDescription>
-            AI-generated specification for engineering.
-          </CardDescription>
+          <CardDescription>Generated from this feature request</CardDescription>
         </CardHeader>
 
         <CardContent>
           {prd ? (
-            <div className="flex flex-col gap-6 rounded-lg border bg-muted/30 p-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center justify-between rounded-lg border p-6">
               <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">
-                    ✅
-                  </span>
+                <h3 className="font-semibold">Product Requirement Document Ready</h3>
 
-                  <h3 className="font-semibold text-lg">
-                    PRD Ready
-                  </h3>
-                </div>
-
-                <p className="text-muted-foreground">
-                  The AI has generated a structured Product
-                  Requirement Document. Review, edit and approve it
-                  before development begins.
+                <p className="text-sm text-muted-foreground">
+                  Review, edit and approve this PRD before development begins.
                 </p>
               </div>
 
-              <Button asChild size="lg">
-                <Link href={`/dashboard/prds/${prd.id}`}>
-                  Review PRD
-                </Link>
+              <Button asChild>
+                <Link href={`/dashboard/prds/${prd.id}`}>Review PRD</Link>
               </Button>
             </div>
           ) : (
-            <div className="rounded-lg border border-dashed p-10 text-center">
-              <div className="space-y-3">
-                <div className="text-5xl">
-                  🤖
-                </div>
+            <div className="rounded-lg border border-dashed p-8">
+              <div className="space-y-2">
+                <h3 className="font-semibold">PRD Generation in Progress</h3>
 
-                <h3 className="text-lg font-semibold">
-                  PRD is being generated
-                </h3>
-
-                <p className="mx-auto max-w-xl text-muted-foreground">
-                  Inngest is currently processing this feature request
-                  and generating the Product Requirement Document.
-                  Refresh this page in a few moments.
+                <p className="text-sm text-muted-foreground">
+                  AI is currently generating the Product Requirement Document for this feature.
                 </p>
               </div>
             </div>

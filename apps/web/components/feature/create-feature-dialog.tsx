@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Loader2, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { trpc } from "~/trpc/client";
@@ -61,7 +62,9 @@ export function CreateFeatureDialog({
       },
     });
 
-  function handleSubmit() {
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
     if (!title.trim()) return;
 
     createFeature.mutate({
@@ -75,33 +78,48 @@ export function CreateFeatureDialog({
   return (
     <Dialog
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(value) => {
+        if (!createFeature.isPending) {
+          setOpen(value);
+        }
+      }}
     >
       <DialogTrigger asChild>
         <Button>
+          <Plus className="mr-2 h-4 w-4" />
           New Feature
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-xl">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-2xl">
+        <DialogHeader className="space-y-2">
           <DialogTitle>
             Create Feature Request
           </DialogTitle>
 
           <DialogDescription>
-            Capture a new customer request or product idea.
+            Add a customer request or product idea.
+            LoopShip will later generate an AI-powered
+            Product Requirement Document from it.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6"
+        >
           <div className="space-y-2">
-            <Label>
+            <Label htmlFor="title">
               Title
+              <span className="text-destructive">
+                {" "}
+                *
+              </span>
             </Label>
 
             <Input
-              placeholder="AI generated code review"
+              id="title"
+              placeholder="AI-generated code review for pull requests"
               value={title}
               onChange={(e) =>
                 setTitle(e.target.value)
@@ -110,13 +128,14 @@ export function CreateFeatureDialog({
           </div>
 
           <div className="space-y-2">
-            <Label>
+            <Label htmlFor="description">
               Description
             </Label>
 
             <Textarea
-              rows={6}
-              placeholder="Describe the feature request..."
+              id="description"
+              rows={7}
+              placeholder="Describe the problem, customer pain points, expected outcome, or any additional context..."
               value={description}
               onChange={(e) =>
                 setDescription(e.target.value)
@@ -126,7 +145,7 @@ export function CreateFeatureDialog({
 
           <div className="space-y-2">
             <Label>
-              Source
+              Request Source
             </Label>
 
             <Select
@@ -165,27 +184,33 @@ export function CreateFeatureDialog({
             </Select>
           </div>
 
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-3 border-t pt-5">
             <Button
+              type="button"
               variant="outline"
+              disabled={createFeature.isPending}
               onClick={() => setOpen(false)}
             >
               Cancel
             </Button>
 
             <Button
-              onClick={handleSubmit}
+              type="submit"
               disabled={
                 createFeature.isPending ||
                 !title.trim()
               }
             >
+              {createFeature.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+
               {createFeature.isPending
                 ? "Creating..."
                 : "Create Feature"}
             </Button>
           </div>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -23,10 +23,5 @@ export default async function ProjectPage({
     }),
   ]);
 
-  return (
-    <ProjectView
-      project={project}
-      features={features}
-    />
-  );
+  return <ProjectView project={project} features={features} />;
 }

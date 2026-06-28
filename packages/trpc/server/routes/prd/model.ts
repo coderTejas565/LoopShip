@@ -68,5 +68,4 @@ export const getPRDByFeatureRequestInput = z.object({
   featureRequestId: z.string(),
 });
 
-export const getPRDByFeatureRequestOutput =
-  getPRDOutput.nullable();
+export const getPRDByFeatureRequestOutput = getPRDOutput.nullable();

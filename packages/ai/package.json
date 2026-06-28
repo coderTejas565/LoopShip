@@ -18,7 +18,7 @@
     "typescript": "5.9.2"
   },
   "scripts": {
-    "dev": "tsx test.ts"
+    "test-ai": "tsx test.ts"
   },
   "exports": {
     ".": "./index.ts"
