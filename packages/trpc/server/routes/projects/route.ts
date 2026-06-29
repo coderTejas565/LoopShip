@@ -105,7 +105,24 @@ export const projectRouter = router({
         });
       }
 
-      return project;
+      return {
+        id: project.id,
+        organizationId: project.organizationId,
+
+        name: project.name,
+        slug: project.slug,
+        description: project.description,
+
+        status: project.status,
+
+        githubRepository: project.githubRepository,
+
+        githubRepositoryOwner: project.githubRepositoryOwner,
+
+        githubRepositoryName: project.githubRepositoryName,
+
+        defaultBranch: project.defaultBranch,
+      };
     }),
 
   getProjects: protectedProcedure
@@ -142,71 +159,71 @@ export const projectRouter = router({
         .where(eq(projects.organizationId, input.organizationId))
         .orderBy(desc(projects.createdAt));
     }),
-    connectRepository: protectedProcedure
-  .input(connectRepositoryInput)
-  .output(connectRepositoryOutput)
-  .mutation(async ({ ctx, input }) => {
-    const projectResult = await ctx.db
-      .select({
-        id: projects.id,
-        organizationId: projects.organizationId,
-      })
-      .from(projects)
-      .where(eq(projects.id, input.projectId))
-      .limit(1);
+  connectRepository: protectedProcedure
+    .input(connectRepositoryInput)
+    .output(connectRepositoryOutput)
+    .mutation(async ({ ctx, input }) => {
+      const projectResult = await ctx.db
+        .select({
+          id: projects.id,
+          organizationId: projects.organizationId,
+        })
+        .from(projects)
+        .where(eq(projects.id, input.projectId))
+        .limit(1);
 
-    const project = projectResult[0];
+      const project = projectResult[0];
 
-    if (!project) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Project not found",
-      });
-    }
+      if (!project) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found",
+        });
+      }
 
-    const membership = await ctx.db
-      .select({
-        id: memberships.id,
-      })
-      .from(memberships)
-      .where(
-        and(
-          eq(memberships.organizationId, project.organizationId),
-          eq(memberships.userId, ctx.user.id),
-        ),
-      )
-      .limit(1);
+      const membership = await ctx.db
+        .select({
+          id: memberships.id,
+        })
+        .from(memberships)
+        .where(
+          and(
+            eq(memberships.organizationId, project.organizationId),
+            eq(memberships.userId, ctx.user.id),
+          ),
+        )
+        .limit(1);
 
-    if (membership.length === 0) {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Access denied",
-      });
-    }
+      if (membership.length === 0) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Access denied",
+        });
+      }
 
-    await ctx.db
-      .update(projects)
-      .set({
-        githubRepositoryId: String(input.repositoryId),
+      await ctx.db
+        .update(projects)
+        .set({
+          githubRepositoryId: String(input.repositoryId),
 
-        githubRepositoryOwner: input.owner,
+          githubRepositoryOwner: input.owner,
 
-        githubRepositoryName: input.name,
+          githubRepositoryName: input.name,
 
-        githubRepository: input.fullName,
+          githubRepository: input.fullName,
 
-        defaultBranch: input.defaultBranch,
+          defaultBranch: input.defaultBranch,
 
-        githubConnectedAt: new Date(),
+          githubConnectedAt: new Date(),
 
-        githubWebhookActive: false,
+          githubWebhookActive: false,
 
-        updatedAt: new Date(),
-      })
-      .where(eq(projects.id, input.projectId));
+          updatedAt: new Date(),
+        })
+        .where(eq(projects.id, input.projectId));
 
-    return {
-      success: true,
-    };
-  }),
+      return {
+        success: true,
+      };
+    }),
 });

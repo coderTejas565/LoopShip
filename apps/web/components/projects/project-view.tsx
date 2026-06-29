@@ -10,6 +10,8 @@ import { Button } from "~/components/ui/button";
 
 import { CreateFeatureDialog } from "~/components/feature/create-feature-dialog";
 
+import { ConnectRepositoryDialog } from "~/components/github/connect-repository-dialog";
+
 type ProjectViewProps = {
   project: {
     id: string;
@@ -17,7 +19,11 @@ type ProjectViewProps = {
     slug: string;
     description: string | null;
     status: "active" | "archived";
+
     githubRepository: string | null;
+    githubRepositoryOwner: string | null;
+    githubRepositoryName: string | null;
+
     defaultBranch: string | null;
   };
 
@@ -46,9 +52,15 @@ export function ProjectView({ project, features }: ProjectViewProps) {
             <Badge>{project.status}</Badge>
 
             <Badge variant="outline">{project.slug}</Badge>
+
+            {project.githubRepository ? (
+              <Badge className="bg-emerald-600">Connected</Badge>
+            ) : (
+              <Badge variant="secondary">GitHub Not Connected</Badge>
+            )}
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2">
             <div className="flex items-center gap-3 rounded-lg border p-4">
               <GitBranch className="h-5 w-5 text-muted-foreground" />
 
@@ -59,15 +71,79 @@ export function ProjectView({ project, features }: ProjectViewProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 rounded-lg border p-4">
-              <Github className="h-5 w-5 text-muted-foreground" />
+            {project.githubRepository ? (
+              <div className="grid gap-5 md:grid-cols-2">
+                <div className="flex items-center gap-3 rounded-xl border p-5">
+                  <GitBranch className="h-5 w-5 text-muted-foreground" />
 
-              <div>
-                <p className="text-xs text-muted-foreground">GitHub Repository</p>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Default Branch</p>
 
-                <p className="font-medium">{project.githubRepository ?? "Not connected"}</p>
+                    <p className="font-medium">{project.defaultBranch}</p>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border p-5 space-y-5">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <Github className="h-5 w-5" />
+
+                      <div>
+                        <p className="text-xs text-muted-foreground">Connected Repository</p>
+
+                        <p className="font-medium">{project.githubRepositoryName}</p>
+
+                        <p className="text-xs text-muted-foreground">
+                          {project.githubRepositoryOwner}
+                        </p>
+                      </div>
+                    </div>
+
+                    <ConnectRepositoryDialog
+                      projectId={project.id}
+                      trigger={
+                        <Button size="sm" variant="outline">
+                          Change
+                        </Button>
+                      }
+                    />
+                  </div>
+
+                  <Button asChild variant="secondary" className="w-full">
+                    <a
+                      href={`https://github.com/${project.githubRepository}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open on GitHub
+                    </a>
+                  </Button>
+
+                  <Button className="w-full" disabled>
+                    Pull Requests
+                  </Button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <Card className="border-dashed">
+                <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+                  <Github className="mb-5 h-12 w-12 text-muted-foreground" />
+
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-semibold">Connect a GitHub Repository</h3>
+
+                    <p className="mx-auto max-w-lg text-sm text-muted-foreground">
+                      Connect your GitHub repository to enable AI pull request reviews, release
+                      tracking, commit history, and automated engineering workflows.
+                    </p>
+                  </div>
+
+                  <div className="mt-8">
+                    <ConnectRepositoryDialog projectId={project.id} />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </CardContent>
       </Card>

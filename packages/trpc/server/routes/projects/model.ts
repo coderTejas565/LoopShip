@@ -37,6 +37,10 @@ export const getProjectOutput = z.object({
 
   githubRepository: z.string().nullable(),
 
+  githubRepositoryOwner: z.string().nullable(),
+
+  githubRepositoryName: z.string().nullable(),
+
   defaultBranch: z.string().nullable(),
 });
 
@@ -57,7 +61,6 @@ export const getProjectsOutput = z.array(
     status: z.enum(["active", "archived"]),
   }),
 );
-
 
 export const connectRepositoryInput = z.object({
   projectId: z.string(),
