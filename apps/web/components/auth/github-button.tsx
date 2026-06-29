@@ -13,12 +13,7 @@ export function GithubButton() {
   }
 
   return (
-    <Button
-      type="button"
-      variant="outline"
-      className="w-full"
-      onClick={handleGithubLogin}
-    >
+    <Button type="button" variant="outline" className="w-full" onClick={handleGithubLogin}>
       Continue with GitHub
     </Button>
   );

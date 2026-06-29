@@ -22,10 +22,9 @@ export default async function TasksPage() {
     redirect("/login");
   }
 
-const caller = api();
+  const caller = api();
 
-const organization =
-  await getCurrentOrganizationOrRedirect();
+  const organization = await getCurrentOrganizationOrRedirect();
 
   const tasks = await caller.task.getOrganizationTasks.query({
     organizationId: organization.id,

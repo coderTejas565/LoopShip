@@ -20,10 +20,9 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-const caller = api();
+  const caller = api();
 
-const organization =
-  await getCurrentOrganizationOrRedirect();
+  const organization = await getCurrentOrganizationOrRedirect();
 
   if (!organization) {
     redirect("/dashboard/onboarding/organization");

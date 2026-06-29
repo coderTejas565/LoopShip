@@ -12,10 +12,9 @@ import { PageHeader } from "~/components/layout/page-header";
 import { getCurrentOrganizationOrRedirect } from "~/lib/get-current-organization";
 
 export default async function ProjectsPage() {
-const caller = api();
+  const caller = api();
 
-const organization =
-  await getCurrentOrganizationOrRedirect();
+  const organization = await getCurrentOrganizationOrRedirect();
 
   const projects = await caller.project.getProjects.query({
     organizationId: organization.id,

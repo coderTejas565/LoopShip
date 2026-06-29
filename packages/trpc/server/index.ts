@@ -11,6 +11,8 @@ import { prdRouter } from "./routes/prd/route";
 
 import { taskRouter } from "./routes/tasks/route";
 
+import { githubRouter } from "./routes/github/route";
+
 export const serverRouter = router({
   // health: healthRouter,
   // auth: authRouter,
@@ -19,6 +21,7 @@ export const serverRouter = router({
   featureRequest: featureRequestRouter,
   prd: prdRouter,
   task: taskRouter,
+  github: githubRouter,
 });
 
 export { createContext } from "./context";

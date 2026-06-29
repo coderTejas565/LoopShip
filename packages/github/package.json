@@ -1,0 +1,17 @@
+{
+  "name": "@repo/github",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "octokit": "^5.0.5"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:^",
+    "@types/node": "^26.0.1",
+    "typescript": "5.9.2"
+  }
+}

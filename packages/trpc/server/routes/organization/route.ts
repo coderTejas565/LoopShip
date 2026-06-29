@@ -86,7 +86,7 @@ export const organizationRouter = router({
         .orderBy(desc(organizations.createdAt))
         .limit(1);
 
-return result[0] ?? null;
+      return result[0] ?? null;
     }),
 
   getMyOrganizations: protectedProcedure.output(getOrganizationsOutput).query(async ({ ctx }) => {

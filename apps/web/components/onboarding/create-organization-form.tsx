@@ -31,16 +31,15 @@ export function CreateOrganizationForm() {
     }
   }, [name, slugEdited]);
 
-  const createOrganization =
-    trpc.organization.createOrganization.useMutation({
-      onSuccess() {
-        router.push("/dashboard");
-        router.refresh();
-      },
-      onError(error) {
-        alert(error.message);
-      },
-    });
+  const createOrganization = trpc.organization.createOrganization.useMutation({
+    onSuccess() {
+      router.push("/dashboard");
+      router.refresh();
+    },
+    onError(error) {
+      alert(error.message);
+    },
+  });
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -52,30 +51,21 @@ export function CreateOrganizationForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-6"
-    >
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="name">
-          Workspace Name
-        </Label>
+        <Label htmlFor="name">Workspace Name</Label>
 
         <Input
           id="name"
           placeholder="Acme Inc."
           value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
+          onChange={(e) => setName(e.target.value)}
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="slug">
-          Workspace URL
-        </Label>
+        <Label htmlFor="slug">Workspace URL</Label>
 
         <Input
           id="slug"
@@ -88,23 +78,15 @@ export function CreateOrganizationForm() {
           required
         />
 
-        <p className="text-xs text-muted-foreground">
-          loopship.ai/{slug || "your-workspace"}
-        </p>
+        <p className="text-xs text-muted-foreground">loopship.ai/{slug || "your-workspace"}</p>
       </div>
 
       <Button
         type="submit"
         className="w-full"
-        disabled={
-          createOrganization.isPending ||
-          !name.trim() ||
-          !slug.trim()
-        }
+        disabled={createOrganization.isPending || !name.trim() || !slug.trim()}
       >
-        {createOrganization.isPending
-          ? "Creating Workspace..."
-          : "Create Workspace"}
+        {createOrganization.isPending ? "Creating Workspace..." : "Create Workspace"}
       </Button>
     </form>
   );
