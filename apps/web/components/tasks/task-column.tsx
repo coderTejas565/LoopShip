@@ -4,12 +4,7 @@ import { Plus } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 import { TaskCard } from "./task-card";
 
@@ -24,21 +19,12 @@ type TaskColumnProps = {
   isLoading: boolean;
 };
 
-
-
-export function TaskColumn({
-  title,
-  status,
-  tasks,
-  isLoading
-}: TaskColumnProps) {
+export function TaskColumn({ title, status, tasks, isLoading }: TaskColumnProps) {
   return (
     <Card className="bg-muted/30">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base">
-            {title}
-          </CardTitle>
+          <CardTitle className="text-base">{title}</CardTitle>
 
           <span
             className="
@@ -55,28 +41,23 @@ export function TaskColumn({
         </div>
       </CardHeader>
 
-
       <CardContent>
-  <Droppable droppableId={status}>
-    {(provided, snapshot) => (
-      <div
-        ref={provided.innerRef}
-        {...provided.droppableProps}
-        className={`
+        <Droppable droppableId={status}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className={`
           min-h-[350px]
           space-y-3
           rounded-lg
           transition-colors
-          ${
-            snapshot.isDraggingOver
-              ? "bg-primary/5"
-              : ""
-          }
+          ${snapshot.isDraggingOver ? "bg-primary/5" : ""}
         `}
-      >
-        {tasks.length === 0 ? (
-          <div
-            className="
+            >
+              {tasks.length === 0 ? (
+                <div
+                  className="
               flex
               min-h-[120px]
               items-center
@@ -87,39 +68,34 @@ export function TaskColumn({
               text-sm
               text-muted-foreground
             "
-          >
-            Drop tasks here
-          </div>
-        ) : (
-          tasks.map((task, index) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              index={index}
-              isLoading={isLoading}
-            />
-          ))
-        )}
+                >
+                  Drop tasks here
+                </div>
+              ) : (
+                tasks.map((task, index) => (
+                  <TaskCard key={task.id} task={task} index={index} isLoading={isLoading} />
+                ))
+              )}
 
-        {provided.placeholder}
+              {provided.placeholder}
 
-        <Button
-          variant="ghost"
-          disabled={isLoading}
-          className="
+              <Button
+                variant="ghost"
+                disabled={isLoading}
+                className="
             mt-2
             w-full
             justify-start
             text-muted-foreground
           "
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Add task
-        </Button>
-      </div>
-    )}
-  </Droppable>
-</CardContent>
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add task
+              </Button>
+            </div>
+          )}
+        </Droppable>
+      </CardContent>
     </Card>
   );
 }

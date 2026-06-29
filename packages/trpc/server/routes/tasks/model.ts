@@ -62,27 +62,13 @@ export const updateTaskStatusOutput = z.object({
   success: z.boolean(),
 });
 
+const taskStatusEnum = z.enum(["backlog", "in_progress", "review", "done"]);
 
-const taskStatusEnum = z.enum([
-  "backlog",
-  "in_progress",
-  "review",
-  "done",
-]);
-
-
-const taskPriorityEnum = z.enum([
- "low",
- "medium",
- "high",
- "critical",
-]);
-
+const taskPriorityEnum = z.enum(["low", "medium", "high", "critical"]);
 
 export const getOrganizationTasksInput = z.object({
   organizationId: z.string(),
 });
-
 
 export const getOrganizationTasksOutput = z.array(
   z.object({
@@ -96,30 +82,31 @@ export const getOrganizationTasksOutput = z.array(
 
     priority: taskPriorityEnum,
 
-
     project: z.object({
       id: z.string(),
       name: z.string(),
     }),
 
+    assignedTo: z
+      .object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string(),
+      })
+      .nullable(),
 
-    assignedTo: z.object({
-      id: z.string(),
-      name: z.string(),
-      email: z.string(),
-    }).nullable(),
+    featureRequest: z
+      .object({
+        id: z.string(),
+        title: z.string(),
+      })
+      .nullable(),
 
-
-    featureRequest: z.object({
-      id: z.string(),
-      title: z.string(),
-    }).nullable(),
-
-
-    prd: z.object({
-      id: z.string(),
-      status: z.string(),
-    }).nullable(),
-  })
+    prd: z
+      .object({
+        id: z.string(),
+        status: z.string(),
+      })
+      .nullable(),
+  }),
 );
-

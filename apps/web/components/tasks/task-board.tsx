@@ -1,19 +1,11 @@
 "use client";
 
 import { KanbanSquare } from "lucide-react";
-import {
-  DragDropContext,
-  type DropResult,
-} from "@hello-pangea/dnd";
+import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 
 import { trpc } from "~/trpc/client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 import { useEffect, useState } from "react";
 
@@ -26,17 +18,9 @@ export type Task = {
 
   description: string | null;
 
-  status:
-    | "backlog"
-    | "in_progress"
-    | "review"
-    | "done";
+  status: "backlog" | "in_progress" | "review" | "done";
 
-  priority:
-    | "low"
-    | "medium"
-    | "high"
-    | "critical";
+  priority: "low" | "medium" | "high" | "critical";
 
   project?: {
     id: string;
@@ -57,13 +41,11 @@ export type Task = {
     title: string;
   } | null;
 
-  prd:
-    | {
-        id: string;
-        version?: number;
-        status?: string;
-      }
-    | null;
+  prd: {
+    id: string;
+    version?: number;
+    status?: string;
+  } | null;
 };
 
 type TaskBoardProps = {
@@ -89,77 +71,67 @@ const columns = [
   },
 ] as const;
 
-export function TaskBoard({
-  tasks,
-}: TaskBoardProps) {
+export function TaskBoard({ tasks }: TaskBoardProps) {
+  const [localTasks, setLocalTasks] = useState(() => tasks);
 
-const [localTasks, setLocalTasks] = useState(() => tasks);
-
-    useEffect(() => {
-  setLocalTasks(tasks);
-}, [tasks]);
+  useEffect(() => {
+    setLocalTasks(tasks);
+  }, [tasks]);
 
   const utils = trpc.useUtils();
 
-  const updateTaskStatus =
-    trpc.task.updateTaskStatus.useMutation({
-      onSuccess: async () => {
-        await Promise.all([
-          utils.task.getTasks.invalidate(),
-          utils.task.getOrganizationTasks.invalidate(),
-        ]);
+  const updateTaskStatus = trpc.task.updateTaskStatus.useMutation({
+    onSuccess: async () => {
+      await Promise.all([
+        utils.task.getTasks.invalidate(),
+        utils.task.getOrganizationTasks.invalidate(),
+      ]);
+    },
+  });
+
+  function onDragEnd(result: DropResult) {
+    if (updateTaskStatus.isPending) return;
+
+    if (!result.destination) return;
+
+    if (result.source.droppableId === result.destination.droppableId) {
+      return;
+    }
+
+    const newStatus = result.destination.droppableId as Task["status"];
+
+    // Save current state in case we need to rollback
+    const previousTasks = [...localTasks];
+
+    // Optimistically update UI
+    setLocalTasks((current) =>
+      current.map((task) =>
+        task.id === result.draggableId
+          ? {
+              ...task,
+              status: newStatus,
+            }
+          : task,
+      ),
+    );
+
+    updateTaskStatus.mutate(
+      {
+        taskId: result.draggableId,
+        status: newStatus,
       },
-    });
-
-function onDragEnd(result: DropResult) {
-if (updateTaskStatus.isPending) return;
-
-  if (!result.destination) return;
-
-  if (
-    result.source.droppableId ===
-    result.destination.droppableId
-  ) {
-    return;
+      {
+        onError() {
+          // Rollback if request fails
+          setLocalTasks(previousTasks);
+        },
+      },
+    );
   }
 
-  const newStatus =
-    result.destination.droppableId as Task["status"];
-
-  // Save current state in case we need to rollback
-const previousTasks = [...localTasks];
-
-  // Optimistically update UI
-  setLocalTasks((current) =>
-    current.map((task) =>
-      task.id === result.draggableId
-        ? {
-            ...task,
-            status: newStatus,
-          }
-        : task,
-    ),
-  );
-
-  updateTaskStatus.mutate(
-    {
-      taskId: result.draggableId,
-      status: newStatus,
-    },
-    {
-      onError() {
-        // Rollback if request fails
-        setLocalTasks(previousTasks);
-      },
-    },
-  );
-}
-
-function getTasksByStatus(status: Task["status"]) {
-  return localTasks.filter(
-    (task) => task.status === status,
-  );
-}
+  function getTasksByStatus(status: Task["status"]) {
+    return localTasks.filter((task) => task.status === status);
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -171,13 +143,10 @@ function getTasksByStatus(status: Task["status"]) {
             </div>
 
             <div>
-              <CardTitle>
-                Engineering Board
-              </CardTitle>
+              <CardTitle>Engineering Board</CardTitle>
 
               <p className="text-sm text-muted-foreground">
-                Track implementation progress
-                from PRD to release.
+                Track implementation progress from PRD to release.
               </p>
             </div>
           </div>
@@ -186,13 +155,13 @@ function getTasksByStatus(status: Task["status"]) {
         <CardContent>
           <div className="grid gap-5 lg:grid-cols-4">
             {columns.map((column) => (
-           <TaskColumn
-  key={column.id}
-  title={column.title}
-  status={column.id}
-  tasks={getTasksByStatus(column.id)}
-  isLoading={updateTaskStatus.isPending}
-/>
+              <TaskColumn
+                key={column.id}
+                title={column.title}
+                status={column.id}
+                tasks={getTasksByStatus(column.id)}
+                isLoading={updateTaskStatus.isPending}
+              />
             ))}
           </div>
         </CardContent>

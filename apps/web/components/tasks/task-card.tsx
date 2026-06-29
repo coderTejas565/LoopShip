@@ -2,19 +2,12 @@
 
 import Link from "next/link";
 
-import {
-  FileText,
-  MessageSquare,
-  User,
-} from "lucide-react";
+import { FileText, MessageSquare, User } from "lucide-react";
 
 import { Draggable } from "@hello-pangea/dnd";
 
 import { Badge } from "~/components/ui/badge";
-import {
-  Card,
-  CardContent,
-} from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
 
 import type { Task } from "./task-board";
 
@@ -36,23 +29,11 @@ function priorityVariant(priority: Task["priority"]) {
   return "outline";
 }
 
-export function TaskCard({
-  task,
-  index,
-  isLoading
-}: TaskCardProps) {
+export function TaskCard({ task, index, isLoading }: TaskCardProps) {
   return (
-    <Draggable
-      draggableId={task.id}
-      index={index}
-       isDragDisabled={isLoading}
-    >
+    <Draggable draggableId={task.id} index={index} isDragDisabled={isLoading}>
       {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
+        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <Card
             className={`
               group
@@ -61,11 +42,7 @@ export function TaskCard({
               hover:-translate-y-0.5
               hover:shadow-md
               active:cursor-grabbing
-              ${
-                snapshot.isDragging
-                  ? "rotate-1 shadow-xl"
-                  : ""
-              }
+              ${snapshot.isDragging ? "rotate-1 shadow-xl" : ""}
             `}
           >
             <CardContent className="space-y-4 p-4">
@@ -98,18 +75,14 @@ export function TaskCard({
               {/* Priority */}
 
               <div className="flex items-center justify-between">
-                <Badge variant={priorityVariant(task.priority)}>
-                  {task.priority}
-                </Badge>
+                <Badge variant={priorityVariant(task.priority)}>{task.priority}</Badge>
 
                 {task.assignedTo && (
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-muted-foreground" />
 
                     {typeof task.assignedTo !== "string" && (
-                      <span className="text-xs text-muted-foreground">
-                        {task.assignedTo.name}
-                      </span>
+                      <span className="text-xs text-muted-foreground">{task.assignedTo.name}</span>
                     )}
                   </div>
                 )}

@@ -51,7 +51,7 @@ export default async function TasksPage() {
         </div>
       </div>
 
-      <TaskBoard tasks={tasks}/>
+      <TaskBoard tasks={tasks} />
     </div>
   );
 }
