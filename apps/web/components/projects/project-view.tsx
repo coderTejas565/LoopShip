@@ -61,68 +61,81 @@ export function ProjectView({ project, features }: ProjectViewProps) {
           </div>
 
           <div className="grid gap-5 md:grid-cols-2">
-            <div className="flex items-center gap-3 rounded-lg border p-4">
-              <GitBranch className="h-5 w-5 text-muted-foreground" />
-
-              <div>
-                <p className="text-xs text-muted-foreground">Default Branch</p>
-
-                <p className="font-medium">{project.defaultBranch ?? "Not configured"}</p>
-              </div>
-            </div>
-
             {project.githubRepository ? (
-              <div className="grid gap-5 md:grid-cols-2">
-                <div className="flex items-center gap-3 rounded-xl border p-5">
-                  <GitBranch className="h-5 w-5 text-muted-foreground" />
+              <div className="md:col-span-2">
+                <Card className="overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="flex flex-col gap-6 p-6">
+                      {/* Header */}
+                      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
+                        <div className="flex items-start gap-4">
+                          <div className="rounded-xl bg-muted p-3">
+                            <Github className="h-7 w-7" />
+                          </div>
 
-                  <div>
-                    <p className="text-xs text-muted-foreground">Default Branch</p>
+                          <div>
+                            <p className="text-sm text-muted-foreground">Connected Repository</p>
 
-                    <p className="font-medium">{project.defaultBranch}</p>
-                  </div>
-                </div>
+                            <h3 className="text-xl font-semibold">
+                              {project.githubRepositoryName}
+                            </h3>
 
-                <div className="rounded-xl border p-5 space-y-5">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <Github className="h-5 w-5" />
+                            <p className="text-sm text-muted-foreground">
+                              {project.githubRepositoryOwner}
+                            </p>
+                          </div>
+                        </div>
 
-                      <div>
-                        <p className="text-xs text-muted-foreground">Connected Repository</p>
+                        <ConnectRepositoryDialog
+                          projectId={project.id}
+                          trigger={<Button variant="outline">Change Repository</Button>}
+                        />
+                      </div>
 
-                        <p className="font-medium">{project.githubRepositoryName}</p>
+                      {/* Details */}
+                      <div className="grid gap-4 md:grid-cols-3">
+                        <div className="rounded-xl border p-4">
+                          <div className="flex items-center gap-3">
+                            <GitBranch className="h-5 w-5 text-muted-foreground" />
 
-                        <p className="text-xs text-muted-foreground">
-                          {project.githubRepositoryOwner}
-                        </p>
+                            <div>
+                              <p className="text-xs text-muted-foreground">Default Branch</p>
+
+                              <p className="font-medium">{project.defaultBranch}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="rounded-xl border p-4">
+                          <p className="text-xs text-muted-foreground">Repository URL</p>
+
+                          <p className="font-medium truncate">{project.githubRepository}</p>
+                        </div>
+
+                        <div className="rounded-xl border p-4">
+                          <p className="text-xs text-muted-foreground">Integration</p>
+
+                          <p className="font-medium text-emerald-600">Active</p>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <Button asChild variant="secondary">
+                          <a
+                            href={`https://github.com/${project.githubRepository}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Open on GitHub
+                          </a>
+                        </Button>
+
+                        <Button disabled>Pull Requests (Coming Soon)</Button>
                       </div>
                     </div>
-
-                    <ConnectRepositoryDialog
-                      projectId={project.id}
-                      trigger={
-                        <Button size="sm" variant="outline">
-                          Change
-                        </Button>
-                      }
-                    />
-                  </div>
-
-                  <Button asChild variant="secondary" className="w-full">
-                    <a
-                      href={`https://github.com/${project.githubRepository}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Open on GitHub
-                    </a>
-                  </Button>
-
-                  <Button className="w-full" disabled>
-                    Pull Requests
-                  </Button>
-                </div>
+                  </CardContent>
+                </Card>
               </div>
             ) : (
               <Card className="border-dashed">

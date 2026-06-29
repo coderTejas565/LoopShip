@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/com
 
 import { PageHeader } from "~/components/layout/page-header";
 import { getCurrentOrganizationOrRedirect } from "~/lib/get-current-organization";
+import { CreateProjectDialog } from "~/components/projects/CreateProjectDialog";
 
 export default async function ProjectsPage() {
   const caller = api();
@@ -34,12 +35,7 @@ export default async function ProjectsPage() {
             label: "Projects",
           },
         ]}
-        actions={
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            New Project
-          </Button>
-        }
+        actions={<CreateProjectDialog organizationId={organization.id} />}
       />
 
       <div className="flex flex-wrap items-center gap-3">
@@ -66,11 +62,7 @@ export default async function ProjectsPage() {
                 AI-powered Product Requirement Documents.
               </p>
             </div>
-
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Create Project
-            </Button>
+            <CreateProjectDialog organizationId={organization.id} />
           </CardContent>
         </Card>
       ) : (
