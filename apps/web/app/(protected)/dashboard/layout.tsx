@@ -7,11 +7,7 @@ import { auth } from "@repo/auth";
 
 import { AppShell } from "~/components/layout/app-shell";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

@@ -18,7 +18,7 @@ export const serverRouter = router({
   project: projectRouter,
   featureRequest: featureRequestRouter,
   prd: prdRouter,
-  task: taskRouter
+  task: taskRouter,
 });
 
 export { createContext } from "./context";

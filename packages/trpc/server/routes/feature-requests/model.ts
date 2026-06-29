@@ -60,20 +60,9 @@ export const getRecentFeatureRequestsOutput = z.array(
 
     title: z.string(),
 
-    source: z.enum([
-      "manual",
-      "email",
-      "support_ticket",
-      "call",
-    ]),
+    source: z.enum(["manual", "email", "support_ticket", "call"]),
 
-status: z.enum([
-  "draft",
-  "clarification_needed",
-  "approved",
-  "rejected",
-  "prd_generated",
-]),
+    status: z.enum(["draft", "clarification_needed", "approved", "rejected", "prd_generated"]),
 
     project: z.object({
       id: z.string().uuid(),

@@ -1,13 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
-import {
- db,
- eq,
- prds,
- desc,
- featureRequests,
- projects,
-} from "@repo/database";
+import { db, eq, prds, desc, featureRequests, projects } from "@repo/database";
 
 import { protectedProcedure, router } from "../../trpc";
 
@@ -22,7 +15,6 @@ import {
   updatePRDOutput,
   getRecentPRDsInput,
   getRecentPRDsOutput,
-
 } from "./model";
 
 export const prdRouter = router({
@@ -184,56 +176,34 @@ export const prdRouter = router({
         success: true,
       };
     }),
-getRecentPRDs: protectedProcedure
-  .input(getRecentPRDsInput)
-  .output(getRecentPRDsOutput)
-  .query(async ({ input }) => {
+  getRecentPRDs: protectedProcedure
+    .input(getRecentPRDsInput)
+    .output(getRecentPRDsOutput)
+    .query(async ({ input }) => {
+      const result = await db
+        .select({
+          id: prds.id,
 
-    const result = await db
-      .select({
-        id: prds.id,
+          version: prds.version,
 
-        version: prds.version,
+          status: prds.status,
 
-        status: prds.status,
+          featureRequest: {
+            title: featureRequests.title,
+          },
+        })
+        .from(prds)
 
-        featureRequest: {
-          title: featureRequests.title,
-        },
+        .innerJoin(featureRequests, eq(prds.featureRequestId, featureRequests.id))
 
-      })
-      .from(prds)
+        .innerJoin(projects, eq(featureRequests.projectId, projects.id))
 
-      .innerJoin(
-        featureRequests,
-        eq(
-          prds.featureRequestId,
-          featureRequests.id
-        )
-      )
+        .where(eq(projects.organizationId, input.organizationId))
 
-      .innerJoin(
-        projects,
-        eq(
-          featureRequests.projectId,
-          projects.id
-        )
-      )
+        .orderBy(desc(prds.createdAt))
 
-      .where(
-        eq(
-          projects.organizationId,
-          input.organizationId
-        )
-      )
+        .limit(input.limit ?? 5);
 
-      .orderBy(
-        desc(prds.createdAt)
-      )
-
-      .limit(input.limit ?? 5);
-
-
-    return result;
-  }),
+      return result;
+    }),
 });

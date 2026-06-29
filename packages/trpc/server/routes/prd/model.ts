@@ -70,12 +70,10 @@ export const getPRDByFeatureRequestInput = z.object({
 
 export const getPRDByFeatureRequestOutput = getPRDOutput.nullable();
 
-
 export const getRecentPRDsInput = z.object({
   organizationId: z.string(),
   limit: z.number().optional(),
 });
-
 
 export const getRecentPRDsOutput = z.array(
   z.object({
@@ -83,15 +81,10 @@ export const getRecentPRDsOutput = z.array(
 
     version: z.number(),
 
-    status: z.enum([
-      "draft",
-      "generated",
-      "approved",
-      "archived",
-    ]),
+    status: z.enum(["draft", "generated", "approved", "archived"]),
 
     featureRequest: z.object({
       title: z.string(),
     }),
-  })
+  }),
 );

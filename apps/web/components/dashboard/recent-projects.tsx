@@ -1,19 +1,10 @@
 import Link from "next/link";
 
-import {
-  ArrowRight,
-  FolderGit2,
-} from "lucide-react";
+import { ArrowRight, FolderGit2 } from "lucide-react";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 
 type RecentProjectsProps = {
   projects: {
@@ -25,30 +16,19 @@ type RecentProjectsProps = {
   }[];
 };
 
-export function RecentProjects({
-  projects,
-}: RecentProjectsProps) {
+export function RecentProjects({ projects }: RecentProjectsProps) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>
-            Recent Projects
-          </CardTitle>
+          <CardTitle>Recent Projects</CardTitle>
 
-          <CardDescription>
-            Continue working on your latest products.
-          </CardDescription>
+          <CardDescription>Continue working on your latest products.</CardDescription>
         </div>
 
-        <Button
-          asChild
-          variant="ghost"
-          size="sm"
-        >
+        <Button asChild variant="ghost" size="sm">
           <Link href="/dashboard/projects">
             View all
-
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
@@ -59,21 +39,14 @@ export function RecentProjects({
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <FolderGit2 className="mb-4 h-12 w-12 text-muted-foreground/50" />
 
-            <h3 className="font-semibold">
-              No projects yet
-            </h3>
+            <h3 className="font-semibold">No projects yet</h3>
 
             <p className="mt-1 text-sm text-muted-foreground">
               Create your first project to start shipping features.
             </p>
 
-            <Button
-              asChild
-              className="mt-6"
-            >
-              <Link href="/dashboard/projects">
-                Create Project
-              </Link>
+            <Button asChild className="mt-6">
+              <Link href="/dashboard/projects">Create Project</Link>
             </Button>
           </div>
         ) : (
@@ -92,20 +65,13 @@ export function RecentProjects({
                       {project.name}
                     </h3>
 
-                    <Badge
-                      variant={
-                        project.status === "active"
-                          ? "default"
-                          : "secondary"
-                      }
-                    >
+                    <Badge variant={project.status === "active" ? "default" : "secondary"}>
                       {project.status}
                     </Badge>
                   </div>
 
                   <p className="mt-2 line-clamp-1 text-sm text-muted-foreground">
-                    {project.description ??
-                      "No description provided."}
+                    {project.description ?? "No description provided."}
                   </p>
                 </div>
 

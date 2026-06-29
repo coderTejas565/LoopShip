@@ -15,10 +15,7 @@ type AppShellProps = {
   children: ReactNode;
 };
 
-export function AppShell({
-  user,
-  children,
-}: AppShellProps) {
+export function AppShell({ user, children }: AppShellProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -27,9 +24,7 @@ export function AppShell({
         <AppNavbar user={user} />
 
         <main className="flex-1">
-          <div className="mx-auto max-w-7xl px-6 py-8">
-            {children}
-          </div>
+          <div className="mx-auto max-w-7xl px-6 py-8">{children}</div>
         </main>
       </SidebarInset>
     </SidebarProvider>

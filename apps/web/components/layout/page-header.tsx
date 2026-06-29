@@ -36,12 +36,7 @@ export function PageHeader({
       {(backHref || breadcrumbs.length > 0) && (
         <div className="flex flex-wrap items-center gap-4">
           {backHref && (
-            <Button
-              asChild
-              variant="ghost"
-              size="sm"
-              className="h-8 px-2"
-            >
+            <Button asChild variant="ghost" size="sm" className="h-8 px-2">
               <Link href={backHref}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {backLabel ?? "Back"}
@@ -52,26 +47,16 @@ export function PageHeader({
           {breadcrumbs.length > 0 && (
             <nav className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               {breadcrumbs.map((item, index) => (
-                <div
-                  key={`${item.label}-${index}`}
-                  className="flex items-center gap-2"
-                >
+                <div key={`${item.label}-${index}`} className="flex items-center gap-2">
                   {item.href ? (
-                    <Link
-                      href={item.href}
-                      className="hover:text-foreground transition-colors"
-                    >
+                    <Link href={item.href} className="hover:text-foreground transition-colors">
                       {item.label}
                     </Link>
                   ) : (
-                    <span className="font-medium text-foreground">
-                      {item.label}
-                    </span>
+                    <span className="font-medium text-foreground">{item.label}</span>
                   )}
 
-                  {index !== breadcrumbs.length - 1 && (
-                    <ChevronRight className="h-4 w-4" />
-                  )}
+                  {index !== breadcrumbs.length - 1 && <ChevronRight className="h-4 w-4" />}
                 </div>
               ))}
             </nav>
@@ -81,22 +66,12 @@ export function PageHeader({
 
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">
-            {title}
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
 
-          {description && (
-            <p className="max-w-2xl text-sm text-muted-foreground">
-              {description}
-            </p>
-          )}
+          {description && <p className="max-w-2xl text-sm text-muted-foreground">{description}</p>}
         </div>
 
-        {actions && (
-          <div className="flex flex-wrap items-center gap-3">
-            {actions}
-          </div>
-        )}
+        {actions && <div className="flex flex-wrap items-center gap-3">{actions}</div>}
       </div>
     </header>
   );

@@ -32,9 +32,7 @@ type CreateFeatureDialogProps = {
   projectId: string;
 };
 
-export function CreateFeatureDialog({
-  projectId,
-}: CreateFeatureDialogProps) {
+export function CreateFeatureDialog({ projectId }: CreateFeatureDialogProps) {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
@@ -43,24 +41,21 @@ export function CreateFeatureDialog({
 
   const [description, setDescription] = useState("");
 
-  const [source, setSource] = useState<
-    "manual" | "email" | "support_ticket" | "call"
-  >("manual");
+  const [source, setSource] = useState<"manual" | "email" | "support_ticket" | "call">("manual");
 
-  const createFeature =
-    trpc.featureRequest.createFeatureRequest.useMutation({
-      onSuccess() {
-        setOpen(false);
+  const createFeature = trpc.featureRequest.createFeatureRequest.useMutation({
+    onSuccess() {
+      setOpen(false);
 
-        setTitle("");
+      setTitle("");
 
-        setDescription("");
+      setDescription("");
 
-        setSource("manual");
+      setSource("manual");
 
-        router.refresh();
-      },
-    });
+      router.refresh();
+    },
+  });
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -93,71 +88,48 @@ export function CreateFeatureDialog({
 
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader className="space-y-2">
-          <DialogTitle>
-            Create Feature Request
-          </DialogTitle>
+          <DialogTitle>Create Feature Request</DialogTitle>
 
           <DialogDescription>
-            Add a customer request or product idea.
-            LoopShip will later generate an AI-powered
+            Add a customer request or product idea. LoopShip will later generate an AI-powered
             Product Requirement Document from it.
           </DialogDescription>
         </DialogHeader>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6"
-        >
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="title">
               Title
-              <span className="text-destructive">
-                {" "}
-                *
-              </span>
+              <span className="text-destructive"> *</span>
             </Label>
 
             <Input
               id="title"
               placeholder="AI-generated code review for pull requests"
               value={title}
-              onChange={(e) =>
-                setTitle(e.target.value)
-              }
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">
-              Description
-            </Label>
+            <Label htmlFor="description">Description</Label>
 
             <Textarea
               id="description"
               rows={7}
               placeholder="Describe the problem, customer pain points, expected outcome, or any additional context..."
               value={description}
-              onChange={(e) =>
-                setDescription(e.target.value)
-              }
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>
-              Request Source
-            </Label>
+            <Label>Request Source</Label>
 
             <Select
               value={source}
               onValueChange={(value) =>
-                setSource(
-                  value as
-                    | "manual"
-                    | "email"
-                    | "support_ticket"
-                    | "call"
-                )
+                setSource(value as "manual" | "email" | "support_ticket" | "call")
               }
             >
               <SelectTrigger>
@@ -165,21 +137,13 @@ export function CreateFeatureDialog({
               </SelectTrigger>
 
               <SelectContent>
-                <SelectItem value="manual">
-                  Manual
-                </SelectItem>
+                <SelectItem value="manual">Manual</SelectItem>
 
-                <SelectItem value="email">
-                  Email
-                </SelectItem>
+                <SelectItem value="email">Email</SelectItem>
 
-                <SelectItem value="support_ticket">
-                  Support Ticket
-                </SelectItem>
+                <SelectItem value="support_ticket">Support Ticket</SelectItem>
 
-                <SelectItem value="call">
-                  Call
-                </SelectItem>
+                <SelectItem value="call">Call</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -194,20 +158,10 @@ export function CreateFeatureDialog({
               Cancel
             </Button>
 
-            <Button
-              type="submit"
-              disabled={
-                createFeature.isPending ||
-                !title.trim()
-              }
-            >
-              {createFeature.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
+            <Button type="submit" disabled={createFeature.isPending || !title.trim()}>
+              {createFeature.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 
-              {createFeature.isPending
-                ? "Creating..."
-                : "Create Feature"}
+              {createFeature.isPending ? "Creating..." : "Create Feature"}
             </Button>
           </div>
         </form>

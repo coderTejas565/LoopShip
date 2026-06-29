@@ -22,7 +22,7 @@ import {
   getFeatureRequestsInput,
   getFeatureRequestsOutput,
   getRecentFeatureRequestsInput,
-getRecentFeatureRequestsOutput,
+  getRecentFeatureRequestsOutput,
 } from "./model";
 
 export const featureRequestRouter = router({
@@ -138,41 +138,32 @@ export const featureRequestRouter = router({
         status: feature.status,
       };
     }),
-    getRecentFeatureRequests: protectedProcedure
-  .input(getRecentFeatureRequestsInput)
-  .output(getRecentFeatureRequestsOutput)
-  .query(async ({ input }) => {
-    const results = await db
-      .select({
-        id: featureRequests.id,
+  getRecentFeatureRequests: protectedProcedure
+    .input(getRecentFeatureRequestsInput)
+    .output(getRecentFeatureRequestsOutput)
+    .query(async ({ input }) => {
+      const results = await db
+        .select({
+          id: featureRequests.id,
 
-        title: featureRequests.title,
+          title: featureRequests.title,
 
-        source: featureRequests.source,
+          source: featureRequests.source,
 
-        status: featureRequests.status,
+          status: featureRequests.status,
 
-        project: {
-          id: projects.id,
+          project: {
+            id: projects.id,
 
-          name: projects.name,
-        },
-      })
-      .from(featureRequests)
-      .innerJoin(
-        projects,
-        eq(featureRequests.projectId, projects.id),
-      )
-      .where(
-        eq(
-          projects.organizationId,
-          input.organizationId,
-        ),
-      )
-      .orderBy(desc(featureRequests.createdAt))
-      .limit(input.limit);
+            name: projects.name,
+          },
+        })
+        .from(featureRequests)
+        .innerJoin(projects, eq(featureRequests.projectId, projects.id))
+        .where(eq(projects.organizationId, input.organizationId))
+        .orderBy(desc(featureRequests.createdAt))
+        .limit(input.limit);
 
-    return results;
-  }),
-  
+      return results;
+    }),
 });

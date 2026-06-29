@@ -19,61 +19,35 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-
   const caller = api();
 
+  const organization = await caller.organization.getCurrentOrganization.query();
 
-  const organization =
-    await caller.organization.getCurrentOrganization.query();
-
-
-  const [
-    projects,
-    recentFeatures,
-    recentPRDs,
-  ] = await Promise.all([
-
+  const [projects, recentFeatures, recentPRDs] = await Promise.all([
     caller.project.getProjects.query({
       organizationId: organization.id,
     }),
-
 
     caller.featureRequest.getRecentFeatureRequests.query({
       organizationId: organization.id,
       limit: 5,
     }),
 
-
     caller.prd.getRecentPRDs.query({
       organizationId: organization.id,
       limit: 5,
     }),
-
   ]);
-
 
   return (
     <div className="space-y-10">
+      <DashboardHeader name={session.user.name} />
 
-      <DashboardHeader
-        name={session.user.name}
-      />
+      <RecentProjects projects={projects.slice(0, 5)} />
 
+      <RecentFeatureRequests features={recentFeatures} />
 
-      <RecentProjects
-        projects={projects.slice(0, 5)}
-      />
-
-
-      <RecentFeatureRequests
-        features={recentFeatures}
-      />
-
-
-      <RecentPRDs
-        prds={recentPRDs}
-      />
-
+      <RecentPRDs prds={recentPRDs} />
     </div>
   );
 }

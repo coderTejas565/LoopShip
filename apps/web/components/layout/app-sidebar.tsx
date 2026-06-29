@@ -3,15 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import {
-  Home,
-  FolderKanban,
-  Inbox,
-  CalendarDays,
-  BarChart3,
-  Settings,
-  Rocket,
-} from "lucide-react";
+import { Home, FolderKanban, Inbox, Columns3, BarChart3, Settings, Rocket } from "lucide-react";
 
 import {
   Sidebar,
@@ -29,21 +21,25 @@ const navigation = [
     href: "/dashboard",
     icon: Home,
   },
+
   {
     title: "Projects",
     href: "/dashboard/projects",
     icon: FolderKanban,
   },
+
   {
-    title: "Inbox",
-    href: "/dashboard/inbox",
+    title: "Feature Requests",
+    href: "/dashboard/features",
     icon: Inbox,
   },
+
   {
-    title: "Calendar",
-    href: "/dashboard/calendar",
-    icon: CalendarDays,
+    title: "Tasks",
+    href: "/dashboard/tasks",
+    icon: Columns3,
   },
+
   {
     title: "Analytics",
     href: "/dashboard/analytics",
@@ -64,34 +60,27 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="inset" collapsible="icon">
-<SidebarHeader className="border-b">
-  <Link
-    href="/dashboard"
-    className="flex items-center gap-3 overflow-hidden py-1"
-  >
-    <div className="flex h-10 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-      <Rocket className="h-5 w-3" />
-    </div>
+      <SidebarHeader className="border-b">
+        <Link href="/dashboard" className="flex items-center gap-3 overflow-hidden py-1">
+          <div className="flex h-10 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+            <Rocket className="h-5 w-3" />
+          </div>
 
-    <div
-      className="
+          <div
+            className="
         flex min-w-0 flex-col
         transition-all duration-200 ease-in-out
         group-data-[collapsible=icon]:w-0
         group-data-[collapsible=icon]:opacity-0
         group-data-[collapsible=icon]:overflow-hidden
       "
-    >
-      <span className="truncate font-semibold tracking-tight">
-        LoopShip
-      </span>
+          >
+            <span className="truncate font-semibold tracking-tight">LoopShip</span>
 
-      <span className="truncate text-xs text-muted-foreground">
-        AI Product OS
-      </span>
-    </div>
-  </Link>
-</SidebarHeader>
+            <span className="truncate text-xs text-muted-foreground">AI Product OS</span>
+          </div>
+        </Link>
+      </SidebarHeader>
 
       <SidebarContent className="py-4">
         <SidebarMenu>
@@ -99,10 +88,7 @@ export function AppSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={
-                  pathname === item.href ||
-                  pathname.startsWith(item.href + "/")
-                }
+                isActive={pathname === item.href || pathname.startsWith(item.href + "/")}
                 tooltip={item.title}
               >
                 <Link href={item.href}>
@@ -120,11 +106,7 @@ export function AppSidebar() {
         <SidebarMenu>
           {secondaryNavigation.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton
-                asChild
-                isActive={pathname === item.href}
-                tooltip={item.title}
-              >
+              <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.title}>
                 <Link href={item.href}>
                   <item.icon className="h-4 w-4" />
 

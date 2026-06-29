@@ -22,18 +22,7 @@ export const featureRequestSourceEnum = pgEnum("feature_request_source", [
 ]);
 
 export const prdStatusEnum = pgEnum("prd_status", ["draft", "generated", "approved", "archived"]);
- 
 
-export const taskStatusEnum = pgEnum("task_status", [
-  "backlog",
-  "in_progress",
-  "review",
-  "done",
-]);
+export const taskStatusEnum = pgEnum("task_status", ["backlog", "in_progress", "review", "done"]);
 
-export const taskPriorityEnum = pgEnum("task_priority", [
-  "low",
-  "medium",
-  "high",
-  "critical",
-]);
+export const taskPriorityEnum = pgEnum("task_priority", ["low", "medium", "high", "critical"]);

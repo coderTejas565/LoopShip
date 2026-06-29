@@ -2,24 +2,13 @@
 
 import { useTheme } from "next-themes";
 
-import {
-  ChevronsUpDown,
-  Moon,
-  Settings,
-  Sun,
-} from "lucide-react";
+import { ChevronsUpDown, Moon, Settings, Sun } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 
-import {
-  SidebarTrigger,
-} from "~/components/ui/sidebar";
+import { SidebarTrigger } from "~/components/ui/sidebar";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "~/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 import {
   DropdownMenu,
@@ -40,11 +29,8 @@ type AppNavbarProps = {
   };
 };
 
-export function AppNavbar({
-  user,
-}: AppNavbarProps) {
-  const { resolvedTheme, setTheme } =
-    useTheme();
+export function AppNavbar({ user }: AppNavbarProps) {
+  const { resolvedTheme, setTheme } = useTheme();
 
   const initials =
     user.name
@@ -64,67 +50,37 @@ export function AppNavbar({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() =>
-            setTheme(
-              resolvedTheme === "dark"
-                ? "light"
-                : "dark"
-            )
-          }
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
         >
-          {resolvedTheme === "dark" ? (
-            <Sun className="h-5 w-5" />
-          ) : (
-            <Moon className="h-5 w-5" />
-          )}
+          {resolvedTheme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
 
-          <span className="sr-only">
-            Toggle Theme
-          </span>
+          <span className="sr-only">Toggle Theme</span>
         </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-11 gap-3 px-2"
-            >
+            <Button variant="ghost" className="h-11 gap-3 px-2">
               <Avatar className="h-9 w-9">
-                <AvatarImage
-                  src={user.image ?? ""}
-                />
+                <AvatarImage src={user.image ?? ""} />
 
-                <AvatarFallback>
-                  {initials}
-                </AvatarFallback>
+                <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
 
               <div className="hidden text-left md:block">
-                <p className="text-sm font-medium leading-none">
-                  {user.name}
-                </p>
+                <p className="text-sm font-medium leading-none">{user.name}</p>
 
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {user.email}
-                </p>
+                <p className="mt-1 text-xs text-muted-foreground">{user.email}</p>
               </div>
 
               <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            align="end"
-            className="w-64"
-          >
+          <DropdownMenuContent align="end" className="w-64">
             <DropdownMenuLabel className="space-y-1">
-              <p className="font-medium">
-                {user.name}
-              </p>
+              <p className="font-medium">{user.name}</p>
 
-              <p className="text-xs font-normal text-muted-foreground">
-                {user.email}
-              </p>
+              <p className="text-xs font-normal text-muted-foreground">{user.email}</p>
             </DropdownMenuLabel>
 
             <DropdownMenuSeparator />
