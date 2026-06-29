@@ -1,0 +1,13 @@
+import type { ReactNode } from "react";
+
+export default function OnboardingLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  return (
+    <main className="min-h-screen bg-muted/30">
+      {children}
+    </main>
+  );
+}

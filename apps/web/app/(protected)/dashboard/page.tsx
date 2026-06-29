@@ -9,6 +9,7 @@ import { DashboardHeader } from "~/components/dashboard/dashboard-header";
 import { RecentProjects } from "~/components/dashboard/recent-projects";
 import { RecentFeatureRequests } from "~/components/dashboard/recent-feature-requests";
 import { RecentPRDs } from "~/components/dashboard/recent-prds";
+import { getCurrentOrganizationOrRedirect } from "~/lib/get-current-organization";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -19,9 +20,14 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const caller = api();
+const caller = api();
 
-  const organization = await caller.organization.getCurrentOrganization.query();
+const organization =
+  await getCurrentOrganizationOrRedirect();
+
+  if (!organization) {
+    redirect("/dashboard/onboarding/organization");
+  }
 
   const [projects, recentFeatures, recentPRDs] = await Promise.all([
     caller.project.getProjects.query({

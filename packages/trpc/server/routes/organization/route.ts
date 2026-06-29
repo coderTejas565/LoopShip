@@ -86,16 +86,7 @@ export const organizationRouter = router({
         .orderBy(desc(organizations.createdAt))
         .limit(1);
 
-      const organization = result[0];
-
-      if (!organization) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Organization not found",
-        });
-      }
-
-      return organization;
+return result[0] ?? null;
     }),
 
   getMyOrganizations: protectedProcedure.output(getOrganizationsOutput).query(async ({ ctx }) => {

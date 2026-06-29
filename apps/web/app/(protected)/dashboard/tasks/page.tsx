@@ -9,6 +9,7 @@ import { PageHeader } from "~/components/layout/page-header";
 
 import { TaskBoard } from "~/components/tasks/task-board";
 import { CreateTaskDialog } from "~/components/tasks/create-task-dialog";
+import { getCurrentOrganizationOrRedirect } from "~/lib/get-current-organization";
 
 import { ListTodo } from "lucide-react";
 
@@ -21,9 +22,10 @@ export default async function TasksPage() {
     redirect("/login");
   }
 
-  const caller = api();
+const caller = api();
 
-  const organization = await caller.organization.getCurrentOrganization.query();
+const organization =
+  await getCurrentOrganizationOrRedirect();
 
   const tasks = await caller.task.getOrganizationTasks.query({
     organizationId: organization.id,
