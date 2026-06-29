@@ -57,3 +57,22 @@ export const getProjectsOutput = z.array(
     status: z.enum(["active", "archived"]),
   }),
 );
+
+
+export const connectRepositoryInput = z.object({
+  projectId: z.string(),
+
+  repositoryId: z.number(),
+
+  owner: z.string(),
+
+  name: z.string(),
+
+  fullName: z.string(),
+
+  defaultBranch: z.string(),
+});
+
+export const connectRepositoryOutput = z.object({
+  success: z.boolean(),
+});

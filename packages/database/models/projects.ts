@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, unique,boolean } from "drizzle-orm/pg-core";
 import { projectStatusEnum } from "./enums";
 import { user } from "./auth-schema";
 import { organizations } from "./organizations";
@@ -30,9 +30,25 @@ export const projects = pgTable(
         onDelete: "cascade",
       }),
 
+    githubRepositoryId: text("github_repository_id"),  
+
+    githubRepositoryOwner: text("github_repository_owner"),
+
+    githubRepositoryName: text("github_repository_name"),
+
     githubRepository: text("github_repository"),
 
-    defaultBranch: text("default_branch").default("main"),
+    githubInstallationId: text("github_installation_id"),
+
+    githubConnectedAt: timestamp("github_connected_at", {
+  withTimezone: true,
+}),
+
+    githubWebhookActive: boolean("github_webhook_active")
+  .default(false)
+  .notNull(),
+
+    defaultBranch: text("default_branch"),
 
     createdAt: timestamp("created_at", {
       withTimezone: true,

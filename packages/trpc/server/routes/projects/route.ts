@@ -5,6 +5,8 @@ import { eq, and, desc, projects, memberships } from "@repo/database";
 import { protectedProcedure, router } from "../../trpc";
 
 import {
+  connectRepositoryInput,
+  connectRepositoryOutput,
   createProjectInput,
   createProjectOutput,
   getProjectInput,
@@ -140,4 +142,71 @@ export const projectRouter = router({
         .where(eq(projects.organizationId, input.organizationId))
         .orderBy(desc(projects.createdAt));
     }),
+    connectRepository: protectedProcedure
+  .input(connectRepositoryInput)
+  .output(connectRepositoryOutput)
+  .mutation(async ({ ctx, input }) => {
+    const projectResult = await ctx.db
+      .select({
+        id: projects.id,
+        organizationId: projects.organizationId,
+      })
+      .from(projects)
+      .where(eq(projects.id, input.projectId))
+      .limit(1);
+
+    const project = projectResult[0];
+
+    if (!project) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Project not found",
+      });
+    }
+
+    const membership = await ctx.db
+      .select({
+        id: memberships.id,
+      })
+      .from(memberships)
+      .where(
+        and(
+          eq(memberships.organizationId, project.organizationId),
+          eq(memberships.userId, ctx.user.id),
+        ),
+      )
+      .limit(1);
+
+    if (membership.length === 0) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Access denied",
+      });
+    }
+
+    await ctx.db
+      .update(projects)
+      .set({
+        githubRepositoryId: String(input.repositoryId),
+
+        githubRepositoryOwner: input.owner,
+
+        githubRepositoryName: input.name,
+
+        githubRepository: input.fullName,
+
+        defaultBranch: input.defaultBranch,
+
+        githubConnectedAt: new Date(),
+
+        githubWebhookActive: false,
+
+        updatedAt: new Date(),
+      })
+      .where(eq(projects.id, input.projectId));
+
+    return {
+      success: true,
+    };
+  }),
 });
