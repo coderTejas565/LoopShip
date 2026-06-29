@@ -65,26 +65,28 @@ export function CreateTaskDialog({ projectId, featureRequestId, prdId }: Props) 
     },
   });
 
-  function submit() {
-    if (!title.trim()) return;
+function submit() {
+  if (!title.trim() || createTask.isPending) return;
 
-    createTask.mutate({
-      projectId,
-
-      title,
-
-      description,
-
-      priority,
-
-      featureRequestId,
-
-      prdId,
-    });
-  }
+  createTask.mutate({
+    projectId,
+    title,
+    description,
+    priority,
+    featureRequestId,
+    prdId,
+  });
+}
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+  open={open}
+  onOpenChange={(value) => {
+    if (!createTask.isPending) {
+      setOpen(value);
+    }
+  }}
+>
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -104,6 +106,7 @@ export function CreateTaskDialog({ projectId, featureRequestId, prdId }: Props) 
             <Label>Task title</Label>
 
             <Input
+            disabled={createTask.isPending}
               placeholder="Implement authentication flow"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -114,6 +117,7 @@ export function CreateTaskDialog({ projectId, featureRequestId, prdId }: Props) 
             <Label>Description</Label>
 
             <Textarea
+            disabled={createTask.isPending}
               rows={5}
               placeholder="Explain what needs to be built..."
               value={description}
@@ -124,7 +128,7 @@ export function CreateTaskDialog({ projectId, featureRequestId, prdId }: Props) 
           <div className="space-y-2">
             <Label>Priority</Label>
 
-            <Select value={priority} onValueChange={(v) => setPriority(v as typeof priority)}>
+            <Select disabled={createTask.isPending} value={priority} onValueChange={(v) => setPriority(v as typeof priority)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -142,14 +146,13 @@ export function CreateTaskDialog({ projectId, featureRequestId, prdId }: Props) 
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              Cancel
-            </Button>
+<Button
+  variant="outline"
+  disabled={createTask.isPending}
+  onClick={() => setOpen(false)}
+>
+  Cancel
+</Button>
 
             <Button onClick={submit} disabled={createTask.isPending || !title.trim()}>
               {createTask.isPending ? "Creating..." : "Create Task"}
