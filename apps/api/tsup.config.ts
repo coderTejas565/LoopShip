@@ -15,12 +15,7 @@ export default defineConfig({
 
   bundle: true,
 
-  noExternal: [
-    "@repo/logger",
-    "@repo/trpc",
-    "@repo/auth",
-    "@repo/inngest",
-  ],
+  noExternal: ["@repo/logger", "@repo/trpc", "@repo/auth", "@repo/inngest"],
 
   env: {
     IS_SERVER_BUILD: "true",

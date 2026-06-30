@@ -10,6 +10,8 @@ import { serverRouter, createContext } from "@repo/trpc/server";
 
 import { env } from "./env";
 
+import authRouter from "./auth";
+
 import { inngestRouter } from "./inngest/route";
 
 export const app = express();
@@ -22,10 +24,7 @@ const openApiDocument = generateOpenApiDocument(serverRouter, {
 app.use(
   cors({
     origin(origin, callback) {
-      const allowedOrigins = [
-        env.FRONTEND_URL,
-        "http://localhost:3000",
-      ];
+      const allowedOrigins = [env.FRONTEND_URL, "http://localhost:3000"];
 
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
@@ -36,6 +35,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use("/api/auth", authRouter);
 
 app.use(express.json());
 

@@ -26,7 +26,6 @@ export async function createContext({ req }: CreateExpressContextOptions): Promi
     headers,
   });
 
-
   return {
     db,
 

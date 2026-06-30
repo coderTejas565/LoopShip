@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./index.ts"
-  },
+  ".": "./index.ts",
+  "./node": "./node.ts"
+},
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.6.20",
     "@repo/database": "workspace:*",
