@@ -1,13 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: "/api/auth/:path*",
-        destination: "https://loopship.onrender.com/api/auth/:path*",
-      },
-    ];
-  },
-};
+const nextConfig = {};
 
 export default nextConfig;

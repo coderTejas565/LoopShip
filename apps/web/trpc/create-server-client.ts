@@ -12,7 +12,7 @@ export const createServerTRPCLink = (opts?: Options) => {
   const link = opts?.enableStreaming ? httpBatchStreamLink : httpLink;
 
   return link({
-    url: "/trpc",
+    url: `${env.NEXT_PUBLIC_API_URL}/trpc`,
 
     async headers() {
       const h = await headers();
