@@ -14,7 +14,7 @@ import { inngestRouter } from "./inngest/route";
 
 export const app = express();
 const openApiDocument = generateOpenApiDocument(serverRouter, {
-  title: "Streamyst OpenAPI",
+  title: "LoopShip",
   version: "1.0.0",
   baseUrl: env.BASE_URL.concat("/api"),
 });
@@ -22,9 +22,12 @@ const openApiDocument = generateOpenApiDocument(serverRouter, {
 if (env.NODE_ENV !== "prod") {
   app.use(
     cors({
-      origin: ["http://localhost:3000", "http://localhost:3001"],
-      credentials: true,
-    }),
+  origin: [
+    env.FRONTEND_URL,
+    "http://localhost:3000",
+  ],
+  credentials: true,
+})
   );
 }
 
