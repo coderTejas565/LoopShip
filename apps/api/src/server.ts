@@ -19,17 +19,23 @@ const openApiDocument = generateOpenApiDocument(serverRouter, {
   baseUrl: env.BASE_URL.concat("/api"),
 });
 
-if (env.NODE_ENV !== "prod") {
-  app.use(
-    cors({
-  origin: [
-    env.FRONTEND_URL,
-    "http://localhost:3000",
-  ],
-  credentials: true,
-})
-  );
-}
+app.use(
+  cors({
+    origin(origin, callback) {
+      const allowedOrigins = [
+        env.FRONTEND_URL,
+        "http://localhost:3000",
+      ];
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Origin not allowed"));
+      }
+    },
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 
